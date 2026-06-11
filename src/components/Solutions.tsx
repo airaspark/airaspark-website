@@ -52,7 +52,7 @@ export default function Solutions() {
     },
     {
       id: 'iot-frameworks',
-      title: 'IoT Solutions',
+      title: 'IOT & EMBEDDED SYSTEMS',
       badge: 'AMBIENT INTELLIGENCE',
       description: 'Secure event-driven firmware, edge-computing orchestrators, dynamic mesh protocols, and high-frequency telemetry parsers.',
       icon: 'Cpu',

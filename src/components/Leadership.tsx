@@ -9,15 +9,7 @@ import cmoImg from '../assets/cmo.jpg';
 
 export default function Leadership() {
   const leaders: Leader[] = [
-    {
-      id: 'syed',
-      name: 'Syed Mahtab M',
-      role: 'Chief Marketing Officer (CMO)',
-      image: cmoImg,
-      bio: 'Directing worldwide product outreach, strategic brand positioning, and enterprise solution discovery.',
-      avatarSeed: 'CMO',
-      socials: { linkedin: '#', twitter: '#' }
-    },
+   
     {
       id: 'Shreyank',
       name: 'Shreyank Minchu P',
@@ -25,6 +17,15 @@ export default function Leadership() {
        image: ceoImg,
       bio: 'Mastermind of global enterprise vision, aligning sovereign technology development with international growth vectors.',
       avatarSeed: 'CEO',
+      socials: { linkedin: '#', twitter: '#' }
+    },
+     {
+      id: 'syed',
+      name: 'Syed Mahtab M',
+      role: 'Chief Marketing Officer (CMO)',
+      image: cmoImg,
+      bio: 'Directing worldwide product outreach, strategic brand positioning, and enterprise solution discovery.',
+      avatarSeed: 'CMO',
       socials: { linkedin: '#', twitter: '#' }
     },
     {
