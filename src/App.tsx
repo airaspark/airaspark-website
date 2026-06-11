@@ -31,9 +31,9 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-[#0B1220] text-white min-h-screen font-sans selection:bg-[#4C8DFF] selection:text-white">
+    <div className="bg-[#0B1220] text-white min-h-screen font-sans selection:bg-[#4C8DFF] selection:text-white overflow-x-hidden">
       <Navbar />
-      <main>
+      <main className="overflow-x-hidden">
         <Hero />
         <About />
         <Solutions />

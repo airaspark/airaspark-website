@@ -87,7 +87,7 @@ export default function FutureVision() {
   };
 
   return (
-    <section id="vision" className="relative py-28 bg-[#07111F]">
+    <section id="vision" className="relative py-20 sm:py-28 bg-[#07111F]">
       {/* Visual background lines */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00AEEF]/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00AEEF]/20 to-transparent" />
@@ -96,24 +96,24 @@ export default function FutureVision() {
       {/* Decorative Orbs */}
       <div className="absolute top-1/4 left-10 w-96 h-96 rounded-full radial-glow opacity-25 blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00AEEF]/5 border border-[#00AEEF]/20 text-xs font-mono uppercase tracking-widest text-[#00AEEF] mb-4">
             <Rocket className="w-3.5 h-3.5 animate-bounce" />
             Horizon Milestones
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold font-display uppercase tracking-tight text-white leading-none">
+          <h2 className="text-3xl sm:text-5xl font-bold font-display uppercase tracking-tight text-white leading-none">
             Future Initiatives
           </h2>
-          <p className="mt-4 text-[#AAB7C4] text-base font-light tracking-wide max-w-xl mx-auto">
+          <p className="mt-4 text-[#AAB7C4] text-sm sm:text-base font-light tracking-wide max-w-xl mx-auto">
             Review AiraSpark’s research and development roadmap as we materialize innovative solutions on the computational horizon.
           </p>
         </div>
 
         {/* Bento-style Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 sm:gap-6">
           {visions.map((vision, idx) => {
             // Setup custom widths representing visual size rhythm (e.g. 1st card takes 3 units, 2nd card takes 3 units, next cards 2 units each, etc.)
             const isMediumGrid = idx === 0 || idx === 1;
@@ -130,16 +130,16 @@ export default function FutureVision() {
                 transition={{ duration: 0.5, delay: idx * 0.08, ease: 'easeOut' }}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className={`glass-panel rounded-2xl p-8 cursor-default border border-white/5 relative overflow-hidden transition-all duration-300 ${gridClass} ${
+                className={`glass-panel rounded-2xl p-5 sm:p-8 cursor-default border border-white/5 relative overflow-hidden transition-all duration-300 ${gridClass} ${
                   hoveredIdx === idx ? 'border-[#00AEEF]/30 bg-[#0B1E36]/30 shadow-md translate-y-[-2px]' : ''
                 }`}
               >
                 {/* Visual card header */}
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-4 sm:mb-6 gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center shrink-0">
                     {getIconElement(vision.icon)}
                   </div>
-                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono tracking-widest uppercase border ${getStatusColor(vision.status)}`}>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-mono tracking-widest uppercase border whitespace-nowrap ${getStatusColor(vision.status)}`}>
                     {vision.status} Project
                   </span>
                 </div>
@@ -158,11 +158,11 @@ export default function FutureVision() {
                 </div>
 
                 {/* Tech Badges inside Card */}
-                <div className="flex flex-wrap gap-1.5 mt-6 mb-8">
+                <div className="flex flex-wrap gap-1.5 mt-5 sm:mt-6 mb-6 sm:mb-8">
                   {vision.techStack.map((tech) => (
                     <span 
                       key={tech} 
-                      className="px-2 py-0.5 rounded bg-[#020813] border border-white/5 text-[10px] font-mono text-[#AAB7C4]"
+                      className="px-2 py-0.5 rounded bg-[#020813] border border-white/5 text-[10px] font-mono text-[#AAB7C4] max-w-full break-words"
                     >
                       {tech}
                     </span>
@@ -170,7 +170,7 @@ export default function FutureVision() {
                 </div>
 
                 {/* Absolute Card Footer with Target Timeline */}
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#AAB7C4]/60">
+                <div className="pt-4 border-t border-white/5 flex items-center justify-between text-[10px] sm:text-xs font-mono text-[#AAB7C4]/60 gap-3">
                   <span className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" /> Target Delivery: {vision.timeline}
                   </span>

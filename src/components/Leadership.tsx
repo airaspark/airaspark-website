@@ -10,21 +10,21 @@ import cmoImg from '../assets/cmo.jpg';
 export default function Leadership() {
   const leaders: Leader[] = [
     {
+      id: 'Shreyank',
+      name: 'Shreyank Minchu P',
+      role: 'Chief Executive Officer (CEO)',
+      image: ceoImg,
+      bio: 'Mastermind of global enterprise vision, aligning sovereign technology development with international growth vectors.',
+      avatarSeed: 'CEO',
+      socials: { linkedin: '#', twitter: '#' }
+    },
+    {
       id: 'syed',
       name: 'Syed Mahtab M',
       role: 'Chief Marketing Officer (CMO)',
       image: cmoImg,
       bio: 'Directing worldwide product outreach, strategic brand positioning, and enterprise solution discovery.',
       avatarSeed: 'CMO',
-      socials: { linkedin: '#', twitter: '#' }
-    },
-    {
-      id: 'Shreyank',
-      name: 'Shreyank Minchu P',
-      role: 'Chief Executive Officer (CEO)',
-       image: ceoImg,
-      bio: 'Mastermind of global enterprise vision, aligning sovereign technology development with international growth vectors.',
-      avatarSeed: 'CEO',
       socials: { linkedin: '#', twitter: '#' }
     },
     {
@@ -127,10 +127,8 @@ export default function Leadership() {
         </div>
 
         {/* Leaders Grid (Centered & Balanced Layout) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-center">
           {leaders.map((leader, index) => {
-            // Give CMO or the fifth card a centered grid position for desktop layouts if needed
-            const isLastOnLarge = index === 4;
             return (
               <motion.div
                 key={leader.id}
@@ -138,9 +136,7 @@ export default function Leadership() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-                className={`glass-panel rounded-2xl p-8 flex flex-col justify-between text-center group border border-white/5 relative hover:border-[#4C8DFF]/30 transition-all duration-300 shadow-md ${
-                  isLastOnLarge ? 'lg:col-span-1 lg:col-start-2' : ''
-                }`}
+                className="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col justify-between text-center group border border-white/5 relative hover:border-[#4C8DFF]/30 transition-all duration-300 shadow-md"
               >
                 {/* Visual card glow on hover */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#4C8DFF]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl" />
@@ -151,20 +147,20 @@ export default function Leadership() {
                     <img
                       src={leader.image}
                       alt={leader.name}
-                      className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#4C8DFF] shadow-lg"
+                      className="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-full object-cover border-4 border-[#4C8DFF] shadow-lg"
                     />
                   </div>
 
                   {/* Name and Role */}
-                  <h3 className="text-lg font-bold font-display text-white group-hover:text-[#4C8DFF] transition-colors uppercase tracking-wide">
+                  <h3 className="text-base sm:text-lg font-bold font-display text-white group-hover:text-[#4C8DFF] transition-colors uppercase tracking-wide">
                     {leader.name}
                   </h3>
-                  <p className="text-xs font-mono text-[#4C8DFF] uppercase mt-1 tracking-widest font-semibold">
+                  <p className="text-[10px] sm:text-xs font-mono text-[#4C8DFF] uppercase mt-1 tracking-widest font-semibold">
                     {leader.role}
                   </p>
 
                   {/* Biography */}
-                  <p className="mt-4 text-[#AAB7C4] text-xs sm:text-sm leading-relaxed tracking-wide font-light max-w-xs mx-auto">
+                  <p className="mt-4 text-[#AAB7C4] text-[11px] sm:text-sm leading-relaxed tracking-wide font-light max-w-xs mx-auto">
                     {leader.bio}
                   </p>
                 </div>

@@ -69,7 +69,7 @@ export default function TechShowcase() {
   };
 
   return (
-    <section id="technologies" className="relative py-28 bg-[#0B1220]">
+    <section id="technologies" className="relative py-20 sm:py-28 bg-[#0B1220]">
       {/* Visual separators */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4C8DFF]/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4C8DFF]/20 to-transparent" />
@@ -78,8 +78,8 @@ export default function TechShowcase() {
       {/* Glow Orbs */}
       <div className="absolute top-1/2 right-0 -translate-y-1/2 w-80 h-80 rounded-full radial-glow-heavy opacity-25 blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-16 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 xl:gap-16 items-start">
           
           {/* Left Column: List of Badges & Selector */}
           <div className="lg:col-span-5 max-w-xl">
@@ -88,33 +88,33 @@ export default function TechShowcase() {
               <p className="text-xs font-mono uppercase tracking-widest text-[#4C8DFF] font-bold">Tech Stack Showcase</p>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl xl:text-5xl font-bold font-display uppercase tracking-tight text-white leading-tight max-w-lg">
+            <h2 className="text-2xl sm:text-4xl xl:text-5xl font-bold font-display uppercase tracking-tight text-white leading-tight max-w-lg">
               Our Core Technologies
             </h2>
             
-            <p className="mt-4 text-[#AAB7C4] text-base leading-relaxed tracking-wide font-light">
+            <p className="mt-3 sm:mt-4 text-[#AAB7C4] text-sm sm:text-base leading-relaxed tracking-wide font-light">
               Click on each technology badge to review our engineering blueprints, competency ratings, and integration use cases.
             </p>
 
             {/* Badges Container */}
-            <div className="mt-8 flex flex-col gap-3">
+            <div className="mt-6 sm:mt-8 flex flex-col gap-3">
               {technologiesData.map((tech, idx) => (
                 <button
                   key={tech.name}
                   onClick={() => setActiveTech(idx)}
-                  className={`w-full text-left px-5 py-3.5 rounded-xl flex items-center justify-between transition-all duration-300 border cursor-pointer ${
+                  className={`w-full text-left px-4 sm:px-5 py-3 rounded-xl flex items-center justify-between transition-all duration-300 border cursor-pointer ${
                     activeTech === idx
                       ? 'bg-[#15233A] border-[#4C8DFF]/40 text-white shadow-[0_0_15px_rgba(76,141,255,0.15)]'
                       : 'bg-[#09111D]/60 border-white/5 text-[#A7B0C0] hover:text-white hover:border-white/10'
                   }`}
                 >
-                  <div className="flex items-center gap-3.5">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div className={`p-2 rounded-lg transition-colors ${
                       activeTech === idx ? 'bg-[#4C8DFF]/20 text-[#4C8DFF]' : 'bg-white/5 text-[#A7B0C0]'
                     }`}>
                       {getCategoryIcon(tech.category)}
                     </div>
-                    <span className="font-display font-medium text-sm sm:text-base tracking-wide">{tech.name}</span>
+                    <span className="font-display font-medium text-sm sm:text-base tracking-wide truncate">{tech.name}</span>
                   </div>
                   <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${
                     activeTech === idx ? 'translate-x-1 text-[#4C8DFF]' : 'text-neutral-500'
@@ -126,7 +126,7 @@ export default function TechShowcase() {
 
           {/* Right Column: High-fidelity specs display and gauges */}
           <div className="lg:col-span-7">
-            <div className="glass-panel rounded-2xl p-6 sm:p-8 lg:p-10 relative overflow-hidden shadow-[0_15px_40px_rgba(2,8,19,0.5)] cyber-border-tl cyber-border-br min-h-[480px] flex flex-col justify-between">
+            <div className="glass-panel rounded-2xl p-5 sm:p-8 lg:p-10 relative overflow-hidden shadow-[0_15px_40px_rgba(2,8,19,0.5)] cyber-border-tl cyber-border-br min-h-[420px] sm:min-h-[480px] flex flex-col justify-between">
               
               {/* Graphic background details */}
               <div className="absolute top-0 right-0 w-44 h-44 rounded-full radial-glow opacity-25 pointer-events-none" />
@@ -138,7 +138,7 @@ export default function TechShowcase() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.3 }}
-                  className="space-y-6"
+                  className="space-y-5 sm:space-y-6"
                 >
                   {/* Category Card Header */}
                   <div className="flex flex-wrap items-center justify-between gap-3">
@@ -150,10 +150,10 @@ export default function TechShowcase() {
 
                   {/* Title & Description */}
                   <div>
-                    <h3 className="text-2xl sm:text-3xl font-bold font-display text-white uppercase tracking-tight max-w-2xl">
+                    <h3 className="text-xl sm:text-3xl font-bold font-display text-white uppercase tracking-tight max-w-2xl">
                       {technologiesData[activeTech].name}
                     </h3>
-                    <p className="mt-4 text-[#A7B0C0] text-sm sm:text-base leading-relaxed tracking-wide font-light max-w-2xl">
+                    <p className="mt-3 sm:mt-4 text-[#A7B0C0] text-sm sm:text-base leading-relaxed tracking-wide font-light max-w-2xl">
                       {technologiesData[activeTech].description}
                     </p>
                   </div>
@@ -176,7 +176,7 @@ export default function TechShowcase() {
                   </div>
 
                   {/* High Tech Dashboard Sub-stats */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-white/5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-5 sm:pt-6 border-t border-white/5">
                     <div className="p-3 bg-[#09111D]/60 rounded-xl border border-white/5">
                       <span className="text-[10px] font-mono text-[#A7B0C0]/60 block uppercase">Protocol Priority</span>
                       <span className="text-sm font-semibold font-display text-white mt-1 block">CRITICAL</span>
@@ -197,7 +197,7 @@ export default function TechShowcase() {
               </AnimatePresence>
 
               {/* Sandbox Mock Console Output to anchor the futuristic design */}
-              <div className="mt-6 p-4 rounded-xl bg-[#09111D] border border-white/5 font-mono text-[10px] text-[#A7B0C0]/60 space-y-1 break-words">
+              <div className="mt-5 sm:mt-6 p-3 sm:p-4 rounded-xl bg-[#09111D] border border-white/5 font-mono text-[9px] sm:text-[10px] text-[#A7B0C0]/60 space-y-1 break-words">
                 <span className="text-[#4C8DFF] block">&gt; shreyank@airaspark:~# inspect --stack {technologiesData[activeTech].category}</span>
                 <span>STATUS: FETCHING CAPABILITY METRICS... OK</span>
                 <span>COMPATIBILITY INDEX: 1.00 (SEAMLESS INTEGRATION)</span>
