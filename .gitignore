@@ -1,0 +1,18 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+dist/
+dist-ssr/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Editor files
+.vscode/
+.DS_Store

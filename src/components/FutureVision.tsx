@@ -37,9 +37,9 @@ export default function FutureVision() {
       icon: 'Map'
     },
     {
-      title: 'AiraSpark IoT Command Center',
-      tagline: 'Zero-latency orchestration dashboard for hardware meshes.',
-      description: 'A cloud-native portal permitting real-time over-the-air firmware deployments, real-time diagnostic stream views, hardware key rotating, and device lifecycle triggers.',
+      title: 'AiraSpark IoT & Product Design Command Center',
+      tagline: 'Zero-latency orchestration for hardware meshes and product delivery.',
+      description: 'A cloud-native portal permitting real-time over-the-air firmware deployments, product design collaboration, diagnostic stream views, hardware key rotation, prototype reviews, and device lifecycle triggers.',
       techStack: ['Rust Firmware', 'WebAssembly Core', 'Apache Kafka Streams', 'React Dashboard'],
       timeline: 'Q1 2027',
       status: 'Conceptual',

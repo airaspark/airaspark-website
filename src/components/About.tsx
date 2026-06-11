@@ -11,28 +11,28 @@ export default function About() {
     story: {
       title: 'Our Genesis & Journey',
       subtitle: 'Where curiosity meets deep engineering.',
-      icon: <Sparkles className="w-6 h-6 text-[#00AEEF]" />,
+      icon: <Sparkles className="w-6 h-6 text-[#4C8DFF]" />,
       body: 'AiraSpark Technologies was forged by a collective of elite developers, architects, and product strategists who realized that standard corporate solutions were failing to adapt to the warp-speed progress of modern AI and decentralized edge computing. Deeply rooted in an aesthetic of absolute functional precision, we design frameworks that don’t only handle today’s workloads, but dynamically anticipate tomorrow’s scaling vectors. We treat software not simply as a codebase, but as custom infrastructure built to withstand evolution.',
     },
     vision: {
       title: 'The Blueprint of Tomorrow',
       subtitle: 'Mapping out a resilient digital universe.',
-      icon: <Compass className="w-6 h-6 text-[#00AEEF]" />,
+      icon: <Compass className="w-6 h-6 text-[#4C8DFF]" />,
       body: 'We envision a fully integrated world where corporate workflows are autonomously orchestrated by intelligent agentic meshes, edge machines communicate in secure, zero-latency feedback loops, and data pipelines automatically self-heal and hyper-scale. AiraSpark is paving the foundation for client organizations to integrate artificial intelligence, cloud-native meshes, and smart internet of things (IoT) devices in absolute harmony, removing human friction points and elevating collective capabilities.',
     },
     mission: {
       title: 'Our Absolute Directive',
       subtitle: 'To empower organizations around the globe to scale.',
-      icon: <Target className="w-6 h-6 text-[#00AEEF]" />,
-      body: 'Our daily mission is simple but uncompromising: AiraSpark Technologies develops innovative software, artificial intelligence, IoT, cloud, and digital solutions that help businesses transform and grow. We dedicate our engineering horsepower to transforming the world’s most intricate computational problems into streamlined, robust, high-performance engines, ensuring our clients achieve long-term technological preeminence.',
+      icon: <Target className="w-6 h-6 text-[#4C8DFF]" />,
+      body: 'Our daily mission is simple but uncompromising: AiraSpark Technologies develops innovative software, artificial intelligence, IoT, cloud, and digital solutions that help businesses transform and grow. We take products from scratch by moving through discovery, architecture, prototyping, validation, iteration, and release, so ideas become reliable systems that can ship, scale, and evolve in the real world. We dedicate our engineering horsepower to transforming the world’s most intricate computational problems into streamlined, robust, high-performance engines, ensuring our clients achieve long-term technological preeminence.',
     },
   };
 
   return (
-    <section id="about" className="relative py-28 bg-[#07111F]">
+    <section id="about" className="relative py-28 bg-[#0B1220]">
       {/* Visual background divider or grid */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00AEEF]/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00AEEF]/20 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4C8DFF]/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4C8DFF]/20 to-transparent" />
 
       {/* Cyber Grid element */}
       <div className="absolute inset-0 cyber-grid opacity-10 pointer-events-none" />
@@ -47,14 +47,14 @@ export default function About() {
           <div className="lg:col-span-5 flex flex-col justify-center">
             {/* Top Tagline */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-px bg-[#00AEEF]" />
-              <p className="text-xs font-mono uppercase tracking-widest text-[#00AEEF] font-bold">Behind AiraSpark</p>
+              <span className="w-8 h-px bg-[#4C8DFF]" />
+              <p className="text-xs font-mono uppercase tracking-widest text-[#4C8DFF] font-bold">Behind AiraSpark</p>
             </div>
 
             {/* Main Headline */}
             <h2 className="text-3xl sm:text-5xl font-bold font-display uppercase tracking-tight text-white leading-tight">
               Igniting Ideation.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00AEEF] to-white">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4C8DFF] to-white">
                 Shattering Boundaries.
               </span>
             </h2>
@@ -71,20 +71,20 @@ export default function About() {
                   onClick={() => setActiveTab(tabId)}
                   className={`w-full text-left px-6 py-4 rounded-xl flex items-center justify-between border transition-all duration-300 relative group cursor-pointer ${
                     activeTab === tabId
-                      ? 'bg-[#0B1E36] border-[#00AEEF]/40 text-white shadow-[0_0_20px_rgba(0,174,239,0.1)]'
-                      : 'bg-transparent border-white/5 text-[#AAB7C4] hover:text-white hover:border-white/10'
+                      ? 'bg-[#15233A] border-[#4C8DFF]/40 text-white shadow-[0_0_20px_rgba(76,141,255,0.1)]'
+                      : 'bg-transparent border-white/5 text-[#A7B0C0] hover:text-white hover:border-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-4">
                     <span className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      activeTab === tabId ? 'bg-[#00AEEF] scale-125' : 'bg-[#AAB7C4]/30'
+                      activeTab === tabId ? 'bg-[#4C8DFF] scale-125' : 'bg-[#A7B0C0]/30'
                     }`} />
                     <span className="font-display font-medium text-sm sm:text-base capitalize tracking-wide">{tabId} Statement</span>
                   </div>
                   {activeTab === tabId && (
                     <motion.div
                       layoutId="activeTabIndicator"
-                      className="text-[#00AEEF]"
+                      className="text-[#4C8DFF]"
                     >
                       {tabsContent[tabId].icon}
                     </motion.div>
@@ -112,14 +112,14 @@ export default function About() {
                   <div>
                     {/* Header Details */}
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-[#00AEEF]/10 border border-[#00AEEF]/30 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-[#4C8DFF]/10 border border-[#4C8DFF]/30 flex items-center justify-center shrink-0">
                         {tabsContent[activeTab].icon}
                       </div>
                       <div>
                         <h3 className="text-xl sm:text-2xl font-bold font-display text-white tracking-wide uppercase">
                           {tabsContent[activeTab].title}
                         </h3>
-                        <p className="text-xs font-mono text-[#00AEEF] tracking-widest uppercase mt-0.5">
+                        <p className="text-xs font-mono text-[#4C8DFF] tracking-widest uppercase mt-0.5">
                           {tabsContent[activeTab].subtitle}
                         </p>
                       </div>
@@ -134,15 +134,15 @@ export default function About() {
                   {/* Micro Metric Banner */}
                   <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-x-8 gap-y-4">
                     <div>
-                      <span className="text-[#00AEEF] font-mono text-xs block font-bold">ACCELERATOR</span>
+                      <span className="text-[#4C8DFF] font-mono text-xs block font-bold">ACCELERATOR</span>
                       <span className="text-white text-sm font-semibold">Dynamic Growth Model</span>
                     </div>
                     <div>
-                      <span className="text-[#00AEEF] font-mono text-xs block font-bold">COMPLIANCE</span>
+                      <span className="text-[#4C8DFF] font-mono text-xs block font-bold">COMPLIANCE</span>
                       <span className="text-white text-sm font-semibold">ISO Grade Standards</span>
                     </div>
                     <div>
-                      <span className="text-[#00AEEF] font-mono text-xs block font-bold">INTEGRATIONS</span>
+                      <span className="text-[#4C8DFF] font-mono text-xs block font-bold">INTEGRATIONS</span>
                       <span className="text-white text-sm font-semibold">Multi-Protocol Ecosystem</span>
                     </div>
                   </div>

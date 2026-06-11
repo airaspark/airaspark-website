@@ -33,7 +33,7 @@ export default function Hero() {
         this.vy = (Math.random() - 0.5) * 0.8;
         this.size = Math.random() * 2.2 + 0.8;
         this.alpha = Math.random() * 0.5 + 0.1;
-        this.color = '#00AEEF';
+        this.color = '#4C8DFF';
       }
 
       update() {
@@ -48,7 +48,7 @@ export default function Hero() {
         context.save();
         context.globalAlpha = this.alpha;
         context.fillStyle = this.color;
-        context.shadowColor = '#00AEEF';
+        context.shadowColor = '#4C8DFF';
         context.shadowBlur = 8;
         context.beginPath();
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -81,8 +81,8 @@ export default function Hero() {
         Math.max(width, height) * 0.8
       );
       gradient.addColorStop(0, '#0a1d35');
-      gradient.addColorStop(0.5, '#07111F');
-      gradient.addColorStop(1, '#020710');
+      gradient.addColorStop(0.5, '#0B1220');
+      gradient.addColorStop(1, '#09111D');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
@@ -146,13 +146,13 @@ export default function Hero() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full radial-glow-heavy opacity-30 blur-3xl pointer-events-none animate-pulse-slow" />
 
       {/* Decorative High-Tech Side Indicator Frames */}
-      <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-6 z-10 text-[10px] tracking-widest font-mono text-[#AAB7C4]/40 uppercase rotate-180 [writing-mode:vertical-lr]">
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-6 z-10 text-[10px] tracking-widest font-mono text-[#A7B0C0]/40 uppercase rotate-180 [writing-mode:vertical-lr]">
         <span>AIRASPARK TECHNOLOGIES</span>
-        <div className="w-px h-16 bg-gradient-to-t from-[#00AEEF]/40 to-transparent" />
+        <div className="w-px h-16 bg-gradient-to-t from-[#4C8DFF]/40 to-transparent" />
       </div>
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-6 z-10 text-[10px] tracking-widest font-mono text-[#AAB7C4]/40 uppercase [writing-mode:vertical-lr]">
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-6 z-10 text-[10px] tracking-widest font-mono text-[#A7B0C0]/40 uppercase [writing-mode:vertical-lr]">
         <span>INNOVATION • AI • IoT</span>
-        <div className="w-px h-16 bg-gradient-to-b from-[#00AEEF]/40 to-transparent" />
+        <div className="w-px h-16 bg-gradient-to-b from-[#4C8DFF]/40 to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center mt-6">
@@ -161,9 +161,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-[#00AEEF] font-bold uppercase tracking-[0.2em] mb-10 w-fit"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-[#4C8DFF] font-bold uppercase tracking-[0.2em] mb-10 w-fit"
         >
-          <span className="flex h-2 w-2 rounded-full bg-[#00AEEF] animate-pulse"></span>
+          <span className="flex h-2 w-2 rounded-full bg-[#4C8DFF] animate-pulse"></span>
           Igniting Innovation. Powering The Future.
         </motion.div>
 
@@ -175,10 +175,10 @@ export default function Hero() {
           className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white font-display uppercase leading-none drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)]"
         >
           AiraSpark<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00AEEF] via-[#AAB7C4] to-white relative">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4C8DFF] via-[#A7B0C0] to-white relative">
             Technologies
             {/* Visual Underline Pulse */}
-            <span className="absolute bottom-1 sm:bottom-3 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00AEEF] to-transparent shadow-[0_1px_10px_rgba(0,174,239,0.6)]" />
+            <span className="absolute bottom-1 sm:bottom-3 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#4C8DFF] to-transparent shadow-[0_1px_10px_rgba(76,141,255,0.6)]" />
           </span>
         </motion.h1>
 
@@ -202,7 +202,7 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
             <button
               onClick={(e) => handleScrollTo(e, 'solutions')}
-              className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-[#00AEEF] text-[#07111F] hover:text-white font-bold rounded-xl flex items-center justify-center gap-3 transition-all duration-300 font-display text-sm cursor-pointer shadow-lg hover:shadow-[#00AEEF]/20"
+              className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-[#4C8DFF] text-[#0B1220] hover:text-white font-bold rounded-xl flex items-center justify-center gap-3 transition-all duration-300 font-display text-sm cursor-pointer shadow-lg hover:shadow-[#4C8DFF]/20"
             >
               Explore Solutions
               <ArrowRight className="w-4.5 h-4.5" />
@@ -210,7 +210,7 @@ export default function Hero() {
 
             <button
               onClick={(e) => handleScrollTo(e, 'contact')}
-              className="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-white hover:text-[#00AEEF] border border-white/10 hover:border-[#00AEEF]/50 transform hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 font-display text-sm uppercase tracking-wider font-semibold cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-white hover:text-[#4C8DFF] border border-white/10 hover:border-[#4C8DFF]/50 transform hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 font-display text-sm uppercase tracking-wider font-semibold cursor-pointer"
             >
               Contact Us
             </button>
@@ -218,10 +218,10 @@ export default function Hero() {
 
           {/* Signature Avatar Overlaps */}
           <div className="flex -space-x-3 items-center">
-            <div className="w-12 h-12 rounded-full border-2 border-[#07111F] bg-[#0b1a2f] flex items-center justify-center text-[10px] font-bold text-white shadow-md">AI</div>
-            <div className="w-12 h-12 rounded-full border-2 border-[#07111F] bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white shadow-md">IoT</div>
-            <div className="w-12 h-12 rounded-full border-2 border-[#07111F] bg-[#00AEEF] text-[#07111F] flex items-center justify-center text-[10px] font-bold uppercase tracking-wider shadow-md">5K+</div>
-            <span className="text-xs text-[#AAB7C4] font-mono ml-3 font-medium uppercase tracking-wider">Trusted Nodes</span>
+            <div className="w-12 h-12 rounded-full border-2 border-[#0B1220] bg-[#15233A] flex items-center justify-center text-[10px] font-bold text-white shadow-md">AI</div>
+            <div className="w-12 h-12 rounded-full border-2 border-[#0B1220] bg-[#1A2740] flex items-center justify-center text-[10px] font-bold text-white shadow-md">IoT</div>
+            <div className="w-12 h-12 rounded-full border-2 border-[#0B1220] bg-[#4C8DFF] text-[#0B1220] flex items-center justify-center text-[10px] font-bold uppercase tracking-wider shadow-md">5K+</div>
+            <span className="text-xs text-[#A7B0C0] font-mono ml-3 font-medium uppercase tracking-wider">Trusted Nodes</span>
           </div>
         </motion.div>
 
@@ -233,41 +233,41 @@ export default function Hero() {
           className="mt-20 pt-10 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left"
         >
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center shrink-0">
-              <Zap className="w-4 h-4 text-[#00AEEF]" />
+            <div className="w-8 h-8 rounded bg-[#4C8DFF]/10 border border-[#4C8DFF]/20 flex items-center justify-center shrink-0">
+              <Zap className="w-4 h-4 text-[#4C8DFF]" />
             </div>
             <div>
-              <p className="text-xs font-mono text-[#AAB7C4] uppercase">Operations speed</p>
+              <p className="text-xs font-mono text-[#A7B0C0] uppercase">Operations speed</p>
               <h4 className="text-lg font-bold font-display text-white mt-0.5">Ultra-Low Latency</h4>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center shrink-0">
-              <Shield className="w-4 h-4 text-[#00AEEF]" />
+            <div className="w-8 h-8 rounded bg-[#4C8DFF]/10 border border-[#4C8DFF]/20 flex items-center justify-center shrink-0">
+              <Shield className="w-4 h-4 text-[#4C8DFF]" />
             </div>
             <div>
-              <p className="text-xs font-mono text-[#AAB7C4] uppercase">Corporate safety</p>
+              <p className="text-xs font-mono text-[#A7B0C0] uppercase">Corporate safety</p>
               <h4 className="text-lg font-bold font-display text-white mt-0.5">Military Security</h4>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center shrink-0">
-              <RefreshCw className="w-4 h-4 text-[#00AEEF] animate-spin-slow" />
+            <div className="w-8 h-8 rounded bg-[#4C8DFF]/10 border border-[#4C8DFF]/20 flex items-center justify-center shrink-0">
+              <RefreshCw className="w-4 h-4 text-[#4C8DFF] animate-spin-slow" />
             </div>
             <div>
-              <p className="text-xs font-mono text-[#AAB7C4] uppercase">Global scalability</p>
+              <p className="text-xs font-mono text-[#A7B0C0] uppercase">Global scalability</p>
               <h4 className="text-lg font-bold font-display text-white mt-0.5">Cloud Scalable</h4>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center shrink-0">
-              <span className="text-[#00AEEF] font-mono text-xs font-bold">AI</span>
+            <div className="w-8 h-8 rounded bg-[#4C8DFF]/10 border border-[#4C8DFF]/20 flex items-center justify-center shrink-0">
+              <span className="text-[#4C8DFF] font-mono text-xs font-bold">AI</span>
             </div>
             <div>
-              <p className="text-xs font-mono text-[#AAB7C4] uppercase">Integration model</p>
+              <p className="text-xs font-mono text-[#A7B0C0] uppercase">Integration model</p>
               <h4 className="text-lg font-bold font-display text-white mt-0.5">Custom AI Models</h4>
             </div>
           </div>
