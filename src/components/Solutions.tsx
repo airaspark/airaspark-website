@@ -52,17 +52,17 @@ export default function Solutions() {
     },
     {
       id: 'iot-frameworks',
-      title: 'IoT, Embedded Systems & Product Design',
-      badge: 'CONNECTED PRODUCT DESIGN',
-      description: 'Full-cycle product development from concept sketches and requirements through hardware selection, firmware architecture, prototyping, enclosure refinement, validation, and production release.',
+      title: 'IOT & EMBEDDED SYSTEMS',
+      badge: 'AMBIENT INTELLIGENCE',
+      description: 'Secure event-driven firmware, edge-computing orchestrators, dynamic mesh protocols, and high-frequency telemetry parsers.',
       icon: 'Cpu',
-      metrics: 'Concept to Production Delivery',
+      metrics: 'Sub-10ms Edge Mesh Synced',
       features: [
-        'Discovery workshops, requirements definition, and use-case mapping',
-        'Hardware architecture selection for MCUs, sensors, and embedded Linux',
-        'Firmware bring-up, peripheral drivers, RTOS integration, and testing',
-        'Industrial design coordination, enclosure iteration, and DFM handoff',
-        'Pilot builds, OTA pipelines, telemetry, diagnostics, and launch support'
+        'Custom RTOS firmware integrations & peripheral drivers',
+        'Ultra-low power Bluetooth, Zigbee, & cellular network mesh',
+        'Distributed edge classification & real-time compute models',
+        'High-density time-series telemetry pipelines',
+        'Over-The-Air (OTA) secure partition firmware updates'
       ]
     },
     {
@@ -115,18 +115,18 @@ export default function Solutions() {
   // Helper matching icon string component
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case 'Code': return <Code className="w-6 h-6 text-[#4C8DFF]" />;
-      case 'Brain': return <Brain className="w-6 h-6 text-[#4C8DFF]" />;
-      case 'Cpu': return <Cpu className="w-6 h-6 text-[#4C8DFF]" />;
-      case 'Globe': return <Globe className="w-6 h-6 text-[#4C8DFF]" />;
-      case 'Cloud': return <Cloud className="w-6 h-6 text-[#4C8DFF]" />;
-      case 'Zap': return <Zap className="w-6 h-6 text-[#4C8DFF]" />;
-      default: return <Code className="w-6 h-6 text-[#4C8DFF]" />;
+      case 'Code': return <Code className="w-6 h-6 text-[#00AEEF]" />;
+      case 'Brain': return <Brain className="w-6 h-6 text-[#00AEEF]" />;
+      case 'Cpu': return <Cpu className="w-6 h-6 text-[#00AEEF]" />;
+      case 'Globe': return <Globe className="w-6 h-6 text-[#00AEEF]" />;
+      case 'Cloud': return <Cloud className="w-6 h-6 text-[#00AEEF]" />;
+      case 'Zap': return <Zap className="w-6 h-6 text-[#00AEEF]" />;
+      default: return <Code className="w-6 h-6 text-[#00AEEF]" />;
     }
   };
 
   return (
-    <section id="solutions" className="relative py-28 bg-[#09111D]">
+    <section id="solutions" className="relative py-28 bg-[#020813]">
       {/* Background design elements */}
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full radial-glow opacity-30 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full radial-glow-heavy opacity-20 blur-3xl pointer-events-none" />
@@ -138,7 +138,7 @@ export default function Solutions() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4C8DFF]/5 border border-[#4C8DFF]/20 text-xs font-mono uppercase tracking-widest text-[#4C8DFF] mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00AEEF]/5 border border-[#00AEEF]/20 text-xs font-mono uppercase tracking-widest text-[#00AEEF] mb-4">
             <Activity className="w-3.5 h-3.5 animate-pulse" />
             Active Capabilities
           </div>
@@ -165,15 +165,15 @@ export default function Solutions() {
               {/* Top Row with card Header info */}
               <div>
                 <div className="flex items-center justify-between mb-8">
-                  <div className="w-12 h-12 rounded-xl bg-[#4C8DFF]/10 border border-[#4C8DFF]/20 flex items-center justify-center group-hover:bg-[#4C8DFF]/20 group-hover:border-[#4C8DFF] transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center group-hover:bg-[#00AEEF]/20 group-hover:border-[#00AEEF] transition-all duration-300">
                     {getIcon(sol.icon)}
                   </div>
-                  <span className="text-[10px] font-mono text-[#4C8DFF]/60 group-hover:text-[#4C8DFF] tracking-widest uppercase transition-colors duration-300">
+                  <span className="text-[10px] font-mono text-[#00AEEF]/60 group-hover:text-[#00AEEF] tracking-widest uppercase transition-colors duration-300">
                     {sol.badge}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold font-display text-white tracking-wide uppercase group-hover:text-[#4C8DFF] transition-colors duration-300">
+                <h3 className="text-xl font-bold font-display text-white tracking-wide uppercase group-hover:text-[#00AEEF] transition-colors duration-300">
                   {sol.title}
                 </h3>
                 
@@ -184,10 +184,10 @@ export default function Solutions() {
 
               {/* Bottom interaction details */}
               <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                <span className="text-xs font-mono text-[#4C8DFF] tracking-wider uppercase font-semibold">
+                <span className="text-xs font-mono text-[#00AEEF] tracking-wider uppercase font-semibold">
                   {sol.metrics}
                 </span>
-                <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#A7B0C0] group-hover:text-white group-hover:bg-[#4C8DFF]/10 transition-all duration-300">
+                <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#AAB7C4] group-hover:text-white group-hover:bg-[#00AEEF]/10 transition-all duration-300">
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </div>
@@ -198,14 +198,14 @@ export default function Solutions() {
         {/* Expandable Dialog Modals */}
         <AnimatePresence>
           {selectedSolution && (
-            <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-24 pb-4 sm:pt-28">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
               {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedSolution(null)}
-                className="absolute inset-0 bg-[#09111D]/90 backdrop-blur-md cursor-zoom-out"
+                className="absolute inset-0 bg-[#020813]/90 backdrop-blur-md cursor-zoom-out"
               />
 
               {/* Dialog Content */}
@@ -214,28 +214,27 @@ export default function Solutions() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.94, y: 15 }}
                 transition={{ type: 'spring', duration: 0.5 }}
-                className="glass-panel w-full max-w-2xl max-h-[calc(100vh-7rem)] rounded-2xl p-6 sm:p-8 relative overflow-y-auto overflow-x-hidden shadow-[0_0_50px_rgba(76,141,255,0.25)] cyber-border-tl cyber-border-br"
+                className="glass-panel w-full max-w-2xl rounded-2xl p-8 sm:p-10 relative overflow-hidden shadow-[0_0_50px_rgba(0,174,239,0.25)] cyber-border-tl cyber-border-br"
               >
-                <div className="flex justify-end mb-2">
-                  <button
-                    onClick={() => setSelectedSolution(null)}
-                    className="p-2 rounded-full hover:bg-white/5 text-[#AAB7C4] hover:text-white transition-colors cursor-pointer"
-                    aria-label="Close details"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
+                {/* Close Button */}
+                <button
+                  onClick={() => setSelectedSolution(null)}
+                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/5 text-[#AAB7C4] hover:text-white transition-colors cursor-pointer"
+                  aria-label="Close details"
+                >
+                  <X className="w-5 h-5" />
+                </button>
 
                 {/* Accent glows */}
                 <div className="absolute top-0 left-0 w-36 h-36 rounded-full radial-glow opacity-30 select-none pointer-events-none" />
 
                 {/* Modal Header */}
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-xl bg-[#4C8DFF]/10 border border-[#4C8DFF]/20 flex items-center justify-center shrink-0">
+                  <div className="w-14 h-14 rounded-xl bg-[#00AEEF]/10 border border-[#00AEEF]/20 flex items-center justify-center shrink-0">
                     {getIcon(selectedSolution.icon)}
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono text-[#4C8DFF] tracking-widest uppercase block mb-1">
+                    <span className="text-[10px] font-mono text-[#00AEEF] tracking-widest uppercase block mb-1">
                       {selectedSolution.badge}
                     </span>
                     <h3 className="text-2xl sm:text-3xl font-bold font-display text-white uppercase tracking-tight">
@@ -250,13 +249,13 @@ export default function Solutions() {
 
                 {/* Features Section */}
                 <div>
-                  <h4 className="text-xs font-mono text-[#4C8DFF] tracking-widest uppercase mb-4 flex items-center gap-2">
+                  <h4 className="text-xs font-mono text-[#00AEEF] tracking-widest uppercase mb-4 flex items-center gap-2">
                     <Terminal className="w-4 h-4" /> Architectural Specifications
                   </h4>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {selectedSolution.features.map((feature, idx) => (
                       <li key={idx} className="flex gap-2.5 items-start text-sm text-[#AAB7C4] leading-relaxed">
-                        <Check className="w-4 h-4 text-[#4C8DFF] shrink-0 mt-0.5" />
+                        <Check className="w-4 h-4 text-[#00AEEF] shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -266,10 +265,10 @@ export default function Solutions() {
                 {/* Footer Metric details */}
                 <div className="mt-8 pt-6 border-t border-white/5 flex flex-wrap gap-4 items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#4C8DFF] animate-pulse" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#00AEEF] animate-pulse" />
                     <span className="text-xs font-mono text-white/50 lowercase">active verification</span>
                   </div>
-                  <span className="text-sm font-semibold text-white bg-[#4C8DFF]/10 px-4 py-1.5 rounded-full border border-[#4C8DFF]/20">
+                  <span className="text-sm font-semibold text-white bg-[#00AEEF]/10 px-4 py-1.5 rounded-full border border-[#00AEEF]/20">
                     Metrics: {selectedSolution.metrics}
                   </span>
                 </div>

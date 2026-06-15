@@ -24,7 +24,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#0B1220] border-t border-white/5 pt-20 pb-10">
+    <footer className="relative bg-[#07111F] border-t border-white/5 pt-20 pb-10">
       {/* Side background grid overlay */}
       <div className="absolute inset-0 cyber-grid opacity-5 pointer-events-none" />
 
@@ -34,23 +34,23 @@ export default function Footer() {
           {/* Column 1: Brand details */}
           <div className="md:col-span-5 space-y-6">
             <a href="#hero" className="flex items-center gap-3 group" onClick={(e) => handleLinkClick(e, 'hero')}>
-              <div className="relative w-10 h-10 flex items-center justify-center rounded-lg bg-gradient-to-tr from-[#0B1220] to-[#15233A] border border-[#4C8DFF]/30 overflow-hidden shadow-inner group-hover:border-[#4C8DFF] transition-all">
-                <span className="text-[#4C8DFF] font-bold text-lg font-display">A</span>
+              <div className="relative w-10 h-10 flex items-center justify-center rounded-lg bg-gradient-to-tr from-[#07111F] to-[#0B1E36] border border-[#00AEEF]/30 overflow-hidden shadow-inner group-hover:border-[#00AEEF] transition-all">
+                <span className="text-[#00AEEF] font-bold text-lg font-display">A</span>
                 <div className="absolute bottom-1 right-1">
-                  <Zap className="w-3.5 h-3.5 text-[#4C8DFF]" />
+                  <Zap className="w-3.5 h-3.5 text-[#00AEEF]" />
                 </div>
               </div>
               <div className="flex flex-col text-left">
                 <span className="text-white font-bold leading-none text-lg tracking-wider font-display uppercase">
                   AiraSpark
                 </span>
-                <span className="text-[9px] text-[#A7B0C0] tracking-widest font-mono uppercase mt-0.5">
+                <span className="text-[9px] text-[#AAB7C4] tracking-widest font-mono uppercase mt-0.5">
                   Technologies
                 </span>
               </div>
             </a>
 
-            <p className="text-sm text-[#A7B0C0] leading-relaxed tracking-wide font-light max-w-sm">
+            <p className="text-sm text-[#AAB7C4] leading-relaxed tracking-wide font-light max-w-sm">
               Igniting Innovation. Powering The Future. We develop custom software integrations, autonomous artificial intelligence models, smart IoT protocols, and modular cloud architectures.
             </p>
 
@@ -60,7 +60,7 @@ export default function Footer() {
                 href="https://linkedin.com" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#A7B0C0] hover:text-[#4C8DFF] hover:border-[#4C8DFF]/50 hover:bg-[#4C8DFF]/10 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#AAB7C4] hover:text-[#00AEEF] hover:border-[#00AEEF]/50 hover:bg-[#00AEEF]/10 transition-all cursor-pointer"
                 aria-label="AiraSpark on LinkedIn"
               >
                 <Linkedin className="w-4.5 h-4.5" />
@@ -69,7 +69,7 @@ export default function Footer() {
                 href="https://twitter.com" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#A7B0C0] hover:text-[#4C8DFF] hover:border-[#4C8DFF]/50 hover:bg-[#4C8DFF]/10 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#AAB7C4] hover:text-[#00AEEF] hover:border-[#00AEEF]/50 hover:bg-[#00AEEF]/10 transition-all cursor-pointer"
                 aria-label="AiraSpark on Twitter"
               >
                 <Twitter className="w-4.5 h-4.5" />
@@ -78,7 +78,7 @@ export default function Footer() {
                 href="https://github.com" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#A7B0C0] hover:text-[#4C8DFF] hover:border-[#4C8DFF]/50 hover:bg-[#4C8DFF]/10 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#AAB7C4] hover:text-[#00AEEF] hover:border-[#00AEEF]/50 hover:bg-[#00AEEF]/10 transition-all cursor-pointer"
                 aria-label="AiraSpark on GitHub"
               >
                 <Github className="w-4.5 h-4.5" />
@@ -118,7 +118,7 @@ export default function Footer() {
               <a href="#contact" onClick={(e) => handleLinkClick(e, 'contact')} className="text-sm text-[#AAB7C4] hover:text-white transition-colors">
                 Join Collaboration
               </a>
-              <div className="pt-2 text-xs text-[#4C8DFF] font-mono flex items-center gap-2">
+              <div className="pt-2 text-xs text-[#00AEEF] font-mono flex items-center gap-2">
                 <Cpu className="w-4 h-4 animate-pulse" />
                 <span>SERVER ENGINE LOCATED IN IN_CO_01</span>
               </div>
@@ -129,13 +129,13 @@ export default function Footer() {
 
         {/* Dynamic bottom information and top-scroll */}
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <p className="text-xs text-[#A7B0C0]/60 font-mono text-center sm:text-left">
-            &copy; {currentYear} AIRASPARK TECHNOLOGIES. ALL RIGHTS RESERVED. SECURED VIA END-TO-END VERIFIED PIPELINES.
+          <p className="text-xs text-[#AAB7C4]/60 font-mono text-center sm:text-left">
+             {currentYear} AIRASPARK TECHNOLOGIES. 
           </p>
 
           <button
             onClick={handleScrollTop}
-            className="group w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#A7B0C0] hover:text-white hover:border-[#4C8DFF]/50 hover:bg-[#4C8DFF]/10 transition-all cursor-pointer"
+            className="group w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#AAB7C4] hover:text-white hover:border-[#00AEEF]/50 hover:bg-[#00AEEF]/10 transition-all cursor-pointer"
             aria-label="Scroll back to top"
           >
             <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />

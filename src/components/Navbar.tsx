@@ -46,7 +46,7 @@ export default function Navbar() {
     const element = document.getElementById(targetId);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 112,
+        top: element.offsetTop - 80,
         behavior: 'smooth',
       });
       setActiveSection(targetId);
@@ -58,25 +58,25 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#07111F]/80 backdrop-blur-md border-b border-[#00AEEF]/20 py-2 shadow-lg'
-          : 'bg-transparent py-2.5 sm:py-3'
+          ? 'bg-[#07111F]/80 backdrop-blur-md border-b border-[#00AEEF]/20 py-4 shadow-lg'
+          : 'bg-transparent py-6'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a href="#hero" className="flex items-center gap-2 sm:gap-2.5 group min-w-0" onClick={(e) => handleLinkClick(e, '#hero')}>
+        <a href="#hero" className="flex items-center gap-3 group" onClick={(e) => handleLinkClick(e, '#hero')}>
           <div className="relative flex items-center justify-center">
             <img
-              src={logo}
-              alt="AiraSpark Logo"
-              className="w-9 h-9 sm:w-11 sm:h-11 relative z-12 object-contain"
-            />
+  src={logo}
+  alt="AiraSpark Logo"
+  className="w-15 h-15 relative z-12 object-contain"
+/>
           </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-white font-bold leading-none text-sm sm:text-lg tracking-wider font-display uppercase group-hover:text-[#00AEEF] transition-colors duration-300 truncate max-w-[110px] sm:max-w-none">
+          <div className="flex flex-col">
+            <span className="text-white font-bold leading-none text-lg tracking-wider font-display uppercase group-hover:text-[#00AEEF] transition-colors duration-300">
               AiraSpark
             </span>
-            <span className="text-[7px] sm:text-[9px] text-[#AAB7C4] tracking-widest font-mono uppercase mt-0.5 truncate max-w-[110px] sm:max-w-none">
+            <span className="text-[9px] text-[#AAB7C4] tracking-widest font-mono uppercase mt-0.5">
               Technologies
             </span>
           </div>
@@ -89,7 +89,7 @@ export default function Navbar() {
               key={link.id}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 relative ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative ${
                 activeSection === link.id
                   ? 'text-white font-semibold'
                   : 'text-[#AAB7C4] hover:text-white'
@@ -112,7 +112,7 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={(e) => handleLinkClick(e, '#contact')}
-            className="group flex items-center gap-2 bg-[#00AEEF]/10 hover:bg-[#00AEEF] text-white hover:text-[#07111F] px-[18px] py-1.5 rounded-full text-[11px] font-semibold tracking-wider uppercase border border-[#00AEEF]/40 hover:border-transparent transition-all duration-300 font-display whitespace-nowrap"
+            className="group flex items-center gap-2 bg-[#00AEEF]/10 hover:bg-[#00AEEF] text-white hover:text-[#07111F] px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase border border-[#00AEEF]/40 hover:border-transparent transition-all duration-300 font-display"
           >
             Connect Portal
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -122,7 +122,7 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-white p-1 hover:text-[#00AEEF] transition-colors shrink-0"
+          className="md:hidden text-white p-1 hover:text-[#00AEEF] transition-colors"
           aria-label="Toggle Menu"
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
