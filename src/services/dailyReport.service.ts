@@ -127,9 +127,9 @@ export async function getDailyReportsByStaff(
 export async function getTodayReport(
   staffId: string
 ) {
-  const today = new Date()
-    .toISOString()
-    .split("T")[0];
+  const today = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata",
+}).format(new Date());
 
   const q = query(
     collection(db, COLLECTIONS.dailyReports),
