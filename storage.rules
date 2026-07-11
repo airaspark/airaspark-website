@@ -1,0 +1,61 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserData() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+
+    function isStaff() {
+      return isAuthenticated() && getUserData().role == 'staff';
+    }
+
+    function isCustomer() {
+      return isAuthenticated() && getUserData().role == 'customer';
+    }
+
+    match /agreements/{allPaths=**} {
+      allow read: if isAdmin() || isStaff() || isCustomer();
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /quotations/{allPaths=**} {
+      allow read: if isAdmin() || isStaff() || isCustomer();
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /receipts/{allPaths=**} {
+      allow read: if isAdmin() || isStaff() || isCustomer();
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /completion-certificates/{allPaths=**} {
+      allow read: if isAdmin() || isStaff() || isCustomer();
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /project-images/{allPaths=**} {
+      allow read: if isAdmin() || isStaff() || isCustomer();
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /documents/{allPaths=**} {
+      allow read: if isAdmin() || isStaff() || isCustomer();
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /profile-images/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}
