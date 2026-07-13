@@ -276,7 +276,7 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
             <div className="relative">
               <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
