@@ -9,10 +9,7 @@ import {
 } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth as firebaseAuth } from "@/firebase";
-import {
-  getUserProfile,
-  upsertUserFromAuth,
-} from "@/services/user.service";
+import { getUserProfile } from "@/services/user.service";
 import { setAuthPersistence } from "@/services/auth.service";
 import { getRememberMePreference } from "@/utils/session";
 import type { UserProfile, UserRole } from "@/types";
@@ -58,29 +55,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setLoading(true);
       try {
-       if (fbUser) {
-
-  const profile = await upsertUserFromAuth(
-    fbUser.uid,
-    {
-      email: fbUser.email,
-      phone: fbUser.phoneNumber,
-      displayName: fbUser.displayName,
-      photoURL: fbUser.photoURL,
-    }
-  );
-
-  if (mounted) {
-    setUser(profile);
-  }
-
-} else {
-
-  if (mounted) {
-    setUser(null);
-  }
-
-}
+        if (fbUser) {
+          const profile = await getUserProfile(fbUser.uid);
+          if (mounted) {
+            setUser(profile);
+          }
+        } else {
+          if (mounted) {
+            setUser(null);
+          }
+        }
       } catch {
         if (mounted) setUser(null);
       } finally {

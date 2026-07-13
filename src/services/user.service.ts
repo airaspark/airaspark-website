@@ -65,6 +65,36 @@ export async function createUserProfile(
   return mapUserDoc(uid, { ...payload, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), lastLoginAt: new Date().toISOString() });
 }
 
+export async function createOrUpdateStaffUserProfile(
+  uid: string,
+  data: {
+    email: string;
+    phone: string;
+    displayName: string | null;
+    photoURL: string | null;
+    staffId: string;
+  }
+): Promise<UserProfile> {
+  const existing = await getUserProfile(uid);
+  const payload: Partial<UserProfile> = {
+    email: data.email,
+    phone: data.phone,
+    displayName: data.displayName,
+    photoURL: data.photoURL,
+    role: "staff",
+    entityId: data.staffId,
+    isLinked: true,
+    lastLoginAt: new Date().toISOString(),
+  };
+
+  if (existing) {
+    await updateUserProfile(uid, payload);
+    return (await getUserProfile(uid))!;
+  }
+
+  return createUserProfile(uid, payload);
+}
+
 export async function updateUserProfile(
   uid: string,
   data: Partial<Omit<UserProfile, "uid" | "createdAt">>

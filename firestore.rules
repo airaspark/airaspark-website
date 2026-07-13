@@ -12,117 +12,226 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isAuthenticated() && getUserData().role == 'admin';
+      return isAuthenticated() && getUserData().role == "admin";
     }
 
     function isStaff() {
-      return isAuthenticated() && getUserData().role == 'staff';
+      return isAuthenticated() && getUserData().role == "staff";
     }
 
     function isCustomer() {
-      return isAuthenticated() && getUserData().role == 'customer';
+      return isAuthenticated() && getUserData().role == "customer";
     }
 
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Users collection
+    // ===========================
+    // USERS
+    // ===========================
+
     match /users/{userId} {
+
       allow read: if isOwner(userId) || isAdmin();
+
       allow create: if isOwner(userId);
+
       allow update: if isOwner(userId) || isAdmin();
+
       allow delete: if isAdmin();
     }
 
-    // ID counters — admin only write, no client read needed ideally
+    // ===========================
+    // COUNTERS
+    // ===========================
+
     match /counters/{year} {
+
       allow read: if isAuthenticated();
+
       allow write: if isAdmin();
     }
 
-    // Customers
+    // ===========================
+    // CUSTOMERS
+    // ===========================
+
     match /customers/{customerId} {
+
       allow read: if isAdmin()
         || (isStaff() && request.auth.uid in resource.data.assignedStaffIds)
         || (isCustomer() && resource.data.firebaseUid == request.auth.uid);
+
       allow write: if isAdmin();
     }
 
-    // Staff
+    // ===========================
+    // STAFF
+    // ===========================
+
     match /staff/{staffId} {
-      allow read: if isAdmin() || (isStaff() && resource.data.firebaseUid == request.auth.uid);
-      allow write: if isAdmin();
+
+      // Read own profile
+      allow read: if isAdmin()
+        || (
+          isAuthenticated()
+          && resource.data.firebaseUid == request.auth.uid
+        );
+
+      // Admin always allowed
+      allow create, delete: if isAdmin();
+
+      // Updates
+      allow update: if
+
+        // Admin
+        isAdmin()
+
+        ||
+
+        // First Login
+        (
+          isAuthenticated()
+          && resource.data.firebaseUid == null
+          && request.resource.data.firebaseUid == request.auth.uid
+          && request.resource.data.profileCompleted == true
+        )
+
+        ||
+
+        // Existing Staff
+        (
+          isAuthenticated()
+          && resource.data.firebaseUid == request.auth.uid
+        );
     }
 
-    // Admins
+    // ===========================
+    // ADMINS
+    // ===========================
+
     match /admins/{adminId} {
+
       allow read: if isAdmin();
+
       allow write: if isAdmin();
     }
 
-    // Projects
+    // ===========================
+    // PROJECTS
+    // ===========================
+
     match /projects/{projectId} {
+
       allow read: if isAdmin()
         || (isStaff() && request.auth.uid in resource.data.assignedStaffIds)
         || (isCustomer() && resource.data.customerId == getUserData().entityId);
+
       allow create, update: if isAdmin() || isStaff();
+
       allow delete: if isAdmin();
     }
 
-    // Payments
+    // ===========================
+    // PAYMENTS
+    // ===========================
+
     match /payments/{paymentId} {
+
       allow read: if isAdmin()
-        || (isCustomer() && resource.data.customerId == getUserData().entityId)
-        || isStaff();
+        || isStaff()
+        || (isCustomer() && resource.data.customerId == getUserData().entityId);
+
       allow write: if isAdmin();
     }
 
-    // Payment requests
+    // ===========================
+    // PAYMENT REQUESTS
+    // ===========================
+
     match /paymentRequests/{requestId} {
+
       allow read: if isAdmin()
         || (isCustomer() && resource.data.customerId == getUserData().entityId);
+
       allow create: if isCustomer();
+
       allow update: if isAdmin();
+
       allow delete: if isAdmin();
     }
 
-    // Milestones
+    // ===========================
+    // MILESTONES
+    // ===========================
+
     match /milestones/{milestoneId} {
+
       allow read: if isAdmin() || isStaff() || isCustomer();
+
       allow write: if isAdmin() || isStaff();
     }
 
-    // Documents
+    // ===========================
+    // DOCUMENTS
+    // ===========================
+
     match /documents/{documentId} {
+
       allow read: if isAdmin() || isStaff() || isCustomer();
+
       allow write: if isAdmin() || isStaff();
     }
 
-    // Reviews — public read for approved
+    // ===========================
+    // REVIEWS
+    // ===========================
+
     match /reviews/{reviewId} {
-      allow read: if resource.data.status == 'approved' || isAuthenticated();
+
+      allow read: if resource.data.status == "approved"
+        || isAuthenticated();
+
       allow create: if true;
+
       allow update, delete: if isAdmin();
     }
 
-    // Activity logs
+    // ===========================
+    // ACTIVITY LOGS
+    // ===========================
+
     match /activityLogs/{logId} {
+
       allow read: if isAdmin();
+
       allow create: if isAuthenticated();
+
       allow update, delete: if isAdmin();
     }
 
-    // Notifications
+    // ===========================
+    // NOTIFICATIONS
+    // ===========================
+
     match /notifications/{notificationId} {
+
       allow read, update: if isOwner(resource.data.userId);
+
       allow create: if isAuthenticated();
+
       allow delete: if isAdmin();
     }
 
-    // Settings
+    // ===========================
+    // SETTINGS
+    // ===========================
+
     match /settings/{settingId} {
+
       allow read: if isAuthenticated();
+
       allow write: if isAdmin();
     }
   }

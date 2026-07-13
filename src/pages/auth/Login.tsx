@@ -8,6 +8,8 @@ import {
   UserCircle,
   Chrome,
   ArrowRight,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import type { ConfirmationResult } from "firebase/auth";
 import {
@@ -38,6 +40,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -276,9 +280,16 @@ export default function Login() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="portal-input pl-15"
-                placeholder="••••••••"
+                className="portal-input pl-20"
+                placeholder="     ••••••••"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-[var(--portal-muted)]"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
           </div>
           <div className="text-right">
@@ -331,8 +342,11 @@ export default function Login() {
             </div>
           )}
           <div id="recaptcha-container" />
+          
           <button type="submit" disabled={submitting} className="portal-btn-primary w-full">
             {otpSent ? "Verify OTP" : "Send OTP"}
+            
+
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -351,20 +365,34 @@ export default function Login() {
               placeholder="login ID"
             />
           </div>
-          <div>
-            <label className="portal-label">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
-              <input
-                type="password"
-                required
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                className="portal-input pl-15"
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
+         <div>
+  <label className="portal-label">Password</label>
+
+  <div className="relative">
+    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
+
+    <input
+      type={showLoginPassword ? "text" : "password"}
+      required
+      value={loginPassword}
+      onChange={(e) => setLoginPassword(e.target.value)}
+      className="portal-input pl-15 pr-15"
+      placeholder="••••••••"
+    />
+
+    <button
+      type="button"
+      onClick={() => setShowLoginPassword(!showLoginPassword)}
+      className="absolute right-5 top-1/2 -translate-y-1/2 text-[var(--portal-muted)] hover:text-white"
+    >
+      {showLoginPassword ? (
+        <EyeOff className="w-5 h-5" />
+      ) : (
+        <Eye className="w-5 h-5" />
+      )}
+    </button>
+  </div>
+</div>
           <button type="submit" disabled={submitting} className="portal-btn-primary w-full">
             Sign In
             <ArrowRight className="w-4 h-4" />

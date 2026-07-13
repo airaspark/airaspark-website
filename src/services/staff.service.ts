@@ -180,6 +180,7 @@ export async function completeStaffProfile(
     email: string;
     phone: string;
     firebaseUid: string;
+    googleLinked?: boolean;
   }
 ) {
   return await updateDoc(
@@ -190,7 +191,7 @@ export async function completeStaffProfile(
       phone: data.phone,
       firebaseUid: data.firebaseUid,
       profileCompleted: true,
-      googleLinked: true,
+      googleLinked: data.googleLinked ?? false,
       updatedAt: new Date(),
     }
   );
