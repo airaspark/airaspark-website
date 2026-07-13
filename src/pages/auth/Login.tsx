@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "motion/react";
 import {
   Mail,
-  Lock,
+
   Phone,
   UserCircle,
   Chrome,
@@ -260,7 +260,7 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
           <div>
             <label className="portal-label">Email</label>
             <div className="relative">
-              <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
+             
               <input
                 type="email"
                 required
@@ -274,14 +274,14 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
           <div>
             <label className="portal-label">Password</label>
             <div className="relative">
-              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
+          
               <input
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="portal-input pl-20"
-                placeholder="     ••••••••"
+                placeholder="••••••••"
               />
               <button
                 type="button"
@@ -369,14 +369,13 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
   <label className="portal-label">Password</label>
 
   <div className="relative">
-    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
-
+   
     <input
       type={showLoginPassword ? "text" : "password"}
       required
       value={loginPassword}
       onChange={(e) => setLoginPassword(e.target.value)}
-      className="portal-input pl-15 pr-15"
+      className="portal-input  pr-15"
       placeholder="••••••••"
     />
 
