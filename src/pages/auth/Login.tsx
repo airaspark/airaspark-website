@@ -15,7 +15,7 @@ import type { ConfirmationResult } from "firebase/auth";
 import {
   signInWithGoogle,
   signInWithEmail,
-  signInWithCustomerId,
+  signInWithPortalId,
   sendPhoneOtp,
   verifyPhoneOtp,
 } from "@/services/auth.service";
@@ -124,7 +124,7 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
     e.preventDefault();
     setSubmitting(true);
     try {
-      const profile = await signInWithCustomerId(
+      const profile = await signInWithPortalId(
         loginId,
         loginPassword,
         rememberMe
@@ -362,7 +362,7 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
               value={loginId}
               onChange={(e) => setLoginId(e.target.value.toUpperCase())}
               className="portal-input font-mono"
-              placeholder="login ID"
+              placeholder="ADM-2026-001 / STF-2026-001 / ASC-2026-001"
             />
           </div>
          <div>

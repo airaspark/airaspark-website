@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { Lock, UserCircle, ArrowRight, ShieldCheck } from "lucide-react";
 import {
-  linkCustomerAccount,
+  linkPortalAccount,
   signOut,
 } from "@/services/auth.service";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,7 +16,7 @@ export default function LinkCustomerAccount() {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const [customerId, setCustomerId] = useState("");
+  const [portalId, setPortalId] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -41,15 +41,12 @@ export default function LinkCustomerAccount() {
     if (!user) return;
     setSubmitting(true);
     try {
-      const profile = await linkCustomerAccount(
-        user.uid,
-        customerId,
-        password
-      );
+      const profile = await linkPortalAccount(user.uid, portalId, password);
       setUser(profile);
       await refreshProfile();
       toast.success("Account linked successfully!");
-      navigate("/customer/dashboard", { replace: true });
+      const dest = ROLE_DASHBOARD_PATHS[profile.role as keyof typeof ROLE_DASHBOARD_PATHS];
+      navigate(dest, { replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to link account");
     } finally {
@@ -72,7 +69,7 @@ export default function LinkCustomerAccount() {
             Link Your Account
           </h2>
           <p className="text-sm text-[var(--portal-muted)]">
-            First-time setup — verify your Customer ID
+            First-time setup — verify your Portal Account
           </p>
         </div>
       </div>
@@ -82,22 +79,22 @@ export default function LinkCustomerAccount() {
         <strong className="text-[var(--portal-text)]">
           {user.email ?? user.phone ?? "your account"}
         </strong>
-        . Enter the Customer ID and password provided by AiraSpark to complete
+        . Enter the Portal ID and password provided by AiraSpark to complete
         portal access.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="portal-label">Customer ID</label>
+          <label className="portal-label">Portal ID</label>
           <div className="relative">
             <UserCircle className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
             <input
               type="text"
               required
-              value={customerId}
-              onChange={(e) => setCustomerId(e.target.value.toUpperCase())}
+              value={portalId}
+              onChange={(e) => setPortalId(e.target.value.toUpperCase())}
               className="portal-input pl-10 font-mono"
-              placeholder="ASC-2026-001"
+              placeholder="ADM-2026-001 / STF-2026-001 / ASC-2026-001"
             />
           </div>
         </div>

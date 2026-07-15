@@ -16,11 +16,14 @@
   type ConfirmationResult,
 } from "firebase/auth";
 
+import { doc, updateDoc } from "firebase/firestore";
+
 import {
   auth,
   googleProvider,
   getRecaptchaVerifier,
   clearRecaptchaVerifier,
+  db,
 } from "@/firebase";
 
 import {
@@ -29,13 +32,16 @@ import {
   createUserProfile,
   updateUserProfile,
   linkUserToCustomer,
+  linkUserToStaff,
+  linkUserToAdmin,
 } from "@/services/user.service";
+
+import { COLLECTIONS } from "@/utils/constants";
 
 import {
   getCustomerByCustomerId,
   verifyCustomerPassword,
   linkCustomerToFirebase,
-  isValidCustomerIdFormat,
   getCustomerByPhone,
 } from "@/services/customer.service";
 
@@ -61,6 +67,45 @@ import type { UserProfile } from "@/types";
       auth,
       rememberMe ? browserLocalPersistence : browserSessionPersistence
     );
+  }
+
+  const PORTAL_ID_PATTERNS = {
+    admin: /^ADM-\d{4}-\d{3}$/i,
+    staff: /^STF-\d{4}-\d{3}$/i,
+    customer: /^ASC-\d{4}-\d{3}$/i,
+  } as const;
+
+  function getPortalRoleFromId(loginId: string): "admin" | "staff" | "customer" | null {
+    const normalized = loginId.trim().toUpperCase();
+    if (PORTAL_ID_PATTERNS.admin.test(normalized)) return "admin";
+    if (PORTAL_ID_PATTERNS.staff.test(normalized)) return "staff";
+    if (PORTAL_ID_PATTERNS.customer.test(normalized)) return "customer";
+    return null;
+  }
+
+  function isPortalAccountActive(account: any): boolean {
+    const status = typeof account?.status === "string" ? account.status.toLowerCase() : undefined;
+    if (status) {
+      return status === "active";
+    }
+    if (typeof account?.isActive === "boolean") {
+      return account.isActive;
+    }
+    if (typeof account?.active === "boolean") {
+      return account.active;
+    }
+    return true;
+  }
+
+  async function linkPortalRecordToFirebase(
+    collectionName: string,
+    recordId: string,
+    uid: string
+  ): Promise<void> {
+    await updateDoc(doc(db, collectionName, recordId), {
+      firebaseUid: uid,
+      updatedAt: new Date().toISOString(),
+    });
   }
 
   export async function signInWithGoogle(
@@ -167,11 +212,11 @@ console.log("Normalized Phone:", normalizedPhone);
 console.log("Admin:", admin);
 
   if (admin) {
+    await linkPortalRecordToFirebase(COLLECTIONS.admins, admin.id, uid);
 
     let profile = await getUserProfile(uid);
 
     if (!profile) {
-
       profile = await createUserProfile(uid, {
         email: admin.email,
         phone,
@@ -181,16 +226,13 @@ console.log("Admin:", admin);
         entityId: admin.adminId,
         isLinked: true,
       });
-
     } else {
-
       await updateUserProfile(uid, {
         role: "admin",
         entityId: admin.adminId,
         phone,
         isLinked: true,
       });
-
       profile = (await getUserProfile(uid))!;
     }
 
@@ -206,11 +248,11 @@ console.log("Admin:", admin);
 console.log("Staff:", staff);
 
   if (staff) {
+    await linkPortalRecordToFirebase(COLLECTIONS.staff, staff.id, uid);
 
     let profile = await getUserProfile(uid);
 
     if (!profile) {
-
       profile = await createUserProfile(uid, {
         email: staff.email,
         phone,
@@ -220,16 +262,13 @@ console.log("Staff:", staff);
         entityId: staff.staffId,
         isLinked: true,
       });
-
     } else {
-
       await updateUserProfile(uid, {
         role: "staff",
         entityId: staff.staffId,
         phone,
         isLinked: true,
       });
-
       profile = (await getUserProfile(uid))!;
     }
 
@@ -280,45 +319,30 @@ console.log("Customer:", customer);
   // UNKNOWN PHONE
   // ---------------------------------
 
-  return upsertUserFromAuth(uid, {
-    email: result.user.email,
-    phone,
-    displayName: result.user.displayName,
-    photoURL: result.user.photoURL,
-  });
+  throw new Error("This account is not linked to any portal.");
 }
 
-  export async function signInWithCustomerId(
+  export async function signInWithPortalId(
     loginId: string,
     password: string,
     rememberMe = true
   ): Promise<UserProfile> {
+    loginId = loginId.trim().toUpperCase();
 
-    loginId = loginId.toUpperCase();
+    const role = getPortalRoleFromId(loginId);
+    if (!role) {
+      throw new Error("Invalid Portal ID.");
+    }
 
-    // =========================
-    // ADMIN
-    // =========================
-    if (loginId.startsWith("ADM-")) {
-
+    if (role === "admin") {
       const admin = await getAdminByAdminId(loginId);
-
-      if (!admin)
-        throw new Error("Admin not found.");
-
+      if (!admin) throw new Error("Account not found.");
+      if (!isPortalAccountActive(admin)) throw new Error("Inactive account.");
       const valid = await verifyAdminPassword(admin, password);
-
-      if (!valid)
-        throw new Error("Invalid Login ID or Password.");
-
+      if (!valid) throw new Error("Incorrect password.");
       await setAuthPersistence(rememberMe);
-
-      const result = await signInWithEmailAndPassword(
-        auth,
-        admin.email,
-        password
-      );
-
+      const result = await signInWithEmailAndPassword(auth, admin.email, password);
+      await linkPortalRecordToFirebase(COLLECTIONS.admins, admin.id, result.user.uid);
       return upsertUserFromAuth(result.user.uid, {
         email: result.user.email,
         phone: result.user.phoneNumber,
@@ -327,74 +351,36 @@ console.log("Customer:", customer);
       });
     }
 
-    // =========================
-    // STAFF
-    // =========================
-    if (loginId.startsWith("STF-")) {
-
+    if (role === "staff") {
       const staff = await getStaffByStaffId(loginId);
-
-      if (!staff)
-        throw new Error("Staff ID not found.");
-
+      if (!staff) throw new Error("Account not found.");
+      if (!isPortalAccountActive(staff)) throw new Error("Inactive account.");
       const valid = await verifyStaffPassword(staff, password);
-
-      if (!valid)
-        throw new Error("Invalid Login ID or Password.");
-
+      if (!valid) throw new Error("Incorrect password.");
       if (!staff.profileCompleted) {
-
         sessionStorage.setItem("staffDocId", staff.id);
         sessionStorage.setItem("staffId", staff.staffId);
-
         throw new Error("FIRST_LOGIN");
       }
-
       await setAuthPersistence(rememberMe);
-
-      const result = await signInWithEmailAndPassword(
-        auth,
-        staff.email as string,
-        password
-      );
-
+      const result = await signInWithEmailAndPassword(auth, staff.email as string, password);
+      await linkPortalRecordToFirebase(COLLECTIONS.staff, staff.id, result.user.uid);
       return upsertUserFromAuth(result.user.uid, {
         email: result.user.email,
         phone: result.user.phoneNumber,
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
       });
-    }
-
-    // =========================
-    // CUSTOMER
-    // =========================
-
-    if (!isValidCustomerIdFormat(loginId)) {
-      throw new Error("Invalid Login ID.");
     }
 
     const customer = await getCustomerByCustomerId(loginId);
-
-    if (!customer)
-      throw new Error("Customer not found.");
-
-    if (!customer.isActive)
-      throw new Error("Customer account is inactive.");
-
+    if (!customer) throw new Error("Account not found.");
+    if (!isPortalAccountActive(customer)) throw new Error("Inactive account.");
     const valid = await verifyCustomerPassword(customer, password);
-
-    if (!valid)
-      throw new Error("Invalid Login ID or Password.");
-
+    if (!valid) throw new Error("Incorrect password.");
     await setAuthPersistence(rememberMe);
-
-    const result = await signInWithEmailAndPassword(
-      auth,
-      customer.authEmail,
-      password
-    );
-
+    const result = await signInWithEmailAndPassword(auth, customer.authEmail, password);
+    await linkCustomerToFirebase(customer.id, result.user.uid);
     return upsertUserFromAuth(result.user.uid, {
       email: result.user.email ?? customer.email,
       phone: result.user.phoneNumber ?? customer.phone,
@@ -403,38 +389,84 @@ console.log("Customer:", customer);
     });
   }
 
-  export async function linkCustomerAccount(
+  export async function linkPortalAccount(
     uid: string,
-    customerId: string,
+    portalId: string,
     password: string
   ): Promise<UserProfile> {
-    if (!isValidCustomerIdFormat(customerId)) {
-      throw new Error("Invalid Customer ID format. Expected: ASC-2026-001");
+    const loginId = portalId.trim().toUpperCase();
+    const role = getPortalRoleFromId(loginId);
+
+    if (!role) {
+      throw new Error("Invalid Portal ID. Expected: ADM-2026-001, STF-2026-001 or ASC-2026-001.");
     }
 
-    const customer = await getCustomerByCustomerId(customerId);
-    if (!customer) {
-      throw new Error("Customer ID not found.");
+    if (role === "admin") {
+      const admin = await getAdminByAdminId(loginId);
+      if (!admin) throw new Error("Admin not found.");
+      if (!isPortalAccountActive(admin)) throw new Error("Inactive account.");
+      if (admin.firebaseUid && admin.firebaseUid !== uid) {
+        throw new Error("This portal account is already linked to another user.");
+      }
+      const valid = await verifyAdminPassword(admin, password);
+      if (!valid) throw new Error("Incorrect password.");
+      const currentUser = auth.currentUser;
+      if (!currentUser) throw new Error("You must be signed in to link your account.");
+      try {
+        const credential = EmailAuthProvider.credential(admin.email, password);
+        await linkWithCredential(currentUser, credential);
+      } catch (err) {
+        const code = (err as { code?: string }).code;
+        if (code !== "auth/credential-already-in-use" && code !== "auth/email-already-in-use") {
+          // Linking optional — Firestore mapping is the source of truth for portal access
+        }
+      }
+      await linkPortalRecordToFirebase(COLLECTIONS.admins, admin.id, uid);
+      await linkUserToAdmin(uid, admin.adminId);
+      const profile = await getUserProfile(uid);
+      if (!profile) throw new Error("Failed to load user profile after linking.");
+      return profile;
     }
+
+    if (role === "staff") {
+      const staff = await getStaffByStaffId(loginId);
+      if (!staff) throw new Error("Staff not found.");
+      if (!isPortalAccountActive(staff)) throw new Error("Inactive account.");
+      if (staff.firebaseUid && staff.firebaseUid !== uid) {
+        throw new Error("This portal account is already linked to another user.");
+      }
+      const valid = await verifyStaffPassword(staff, password);
+      if (!valid) throw new Error("Incorrect password.");
+      const currentUser = auth.currentUser;
+      if (!currentUser) throw new Error("You must be signed in to link your account.");
+      try {
+        const credential = EmailAuthProvider.credential(staff.email as string, password);
+        await linkWithCredential(currentUser, credential);
+      } catch (err) {
+        const code = (err as { code?: string }).code;
+        if (code !== "auth/credential-already-in-use" && code !== "auth/email-already-in-use") {
+          // Linking optional — Firestore mapping is the source of truth for portal access
+        }
+      }
+      await linkPortalRecordToFirebase(COLLECTIONS.staff, staff.id, uid);
+      await linkUserToStaff(uid, staff.staffId);
+      const profile = await getUserProfile(uid);
+      if (!profile) throw new Error("Failed to load user profile after linking.");
+      return profile;
+    }
+
+    const customer = await getCustomerByCustomerId(loginId);
+    if (!customer) throw new Error("Portal ID not found.");
+    if (!isPortalAccountActive(customer)) throw new Error("Inactive account.");
     if (customer.firebaseUid && customer.firebaseUid !== uid) {
-      throw new Error("This Customer ID is already linked to another account.");
+      throw new Error("This portal account is already linked to another user.");
     }
-
     const valid = await verifyCustomerPassword(customer, password);
-    if (!valid) {
-      throw new Error("Invalid password for this Customer ID.");
-    }
-
+    if (!valid) throw new Error("Incorrect password.");
     const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("You must be signed in to link your account.");
-    }
-
+    if (!currentUser) throw new Error("You must be signed in to link your account.");
     try {
-      const credential = EmailAuthProvider.credential(
-        customer.authEmail,
-        password
-      );
+      const credential = EmailAuthProvider.credential(customer.authEmail, password);
       await linkWithCredential(currentUser, credential);
     } catch (err) {
       const code = (err as { code?: string }).code;
@@ -442,14 +474,10 @@ console.log("Customer:", customer);
         // Linking optional — Firestore mapping is the source of truth for portal access
       }
     }
-
-    await linkCustomerToFirebase(customer.id, uid);
+    await linkPortalRecordToFirebase(COLLECTIONS.customers, customer.id, uid);
     await linkUserToCustomer(uid, customer.customerId);
-
     const profile = await getUserProfile(uid);
-    if (!profile) {
-      throw new Error("Failed to load user profile after linking.");
-    }
+    if (!profile) throw new Error("Failed to load user profile after linking.");
     return profile;
   }
 
