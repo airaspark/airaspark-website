@@ -17,6 +17,7 @@ export interface Admin {
   name: string;
   email: string;
   password: string;
+  phone?: string;
   role: "admin";
   active: boolean;
   createdAt: string;
@@ -33,6 +34,7 @@ function mapAdminDoc(
     name: data.name as string,
     email: data.email as string,
     password: (data.password as string) ?? "",
+    phone: (data.phone as string) ?? "",
     role: "admin",
     active: (data.active as boolean) ?? true,
     createdAt: timestampToIso(data.createdAt as never),
@@ -53,7 +55,10 @@ export async function getAdminByUid(
 
   if (snap.empty) return null;
 
-  return mapAdminDoc(snap.docs[0].id, snap.docs[0].data());
+  return mapAdminDoc(
+    snap.docs[0].id,
+    snap.docs[0].data()
+  );
 }
 
 export async function getAdminByAdminId(
@@ -63,6 +68,26 @@ export async function getAdminByAdminId(
   const q = query(
     collection(db, COLLECTIONS.admins),
     where("adminId", "==", adminId),
+    limit(1)
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) return null;
+
+  return {
+    id: snap.docs[0].id,
+    ...(snap.docs[0].data() as Record<string, unknown>),
+  } as Admin & Record<string, unknown>;
+}
+
+export async function getAdminByPhone(
+  phone: string
+): Promise<(Admin & Record<string, unknown>) | null> {
+
+  const q = query(
+    collection(db, COLLECTIONS.admins),
+    where("phone", "==", phone),
     limit(1)
   );
 

@@ -13,14 +13,19 @@ googleProvider.setCustomParameters({ prompt: "select_account" });
 
 let recaptchaVerifier: RecaptchaVerifier | null = null;
 
-export function getRecaptchaVerifier(containerId: string): RecaptchaVerifier {
+export function getRecaptchaVerifier(
+  containerId: string
+): RecaptchaVerifier {
+
+  // Reuse existing verifier instead of creating another one
   if (recaptchaVerifier) {
-    recaptchaVerifier.clear();
+    return recaptchaVerifier;
   }
+
   recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
     size: "invisible",
-    callback: () => {},
   });
+
   return recaptchaVerifier;
 }
 
@@ -28,5 +33,11 @@ export function clearRecaptchaVerifier(): void {
   if (recaptchaVerifier) {
     recaptchaVerifier.clear();
     recaptchaVerifier = null;
+
+    // Remove the old widget from the page
+    const container = document.getElementById("recaptcha-container");
+    if (container) {
+      container.innerHTML = "";
+    }
   }
 }

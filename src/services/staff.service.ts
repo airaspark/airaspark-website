@@ -4,12 +4,6 @@ import {
   limit,
   query,
   where,
-} from "firebase/firestore";
-
-import { db } from "@/firebase";
-import { COLLECTIONS } from "@/utils/constants";
-import { timestampToIso } from "@/services/idGenerator.service";
-import {
   addDoc,
   updateDoc,
   deleteDoc,
@@ -17,6 +11,9 @@ import {
   orderBy,
 } from "firebase/firestore";
 
+import { db } from "@/firebase";
+import { COLLECTIONS } from "@/utils/constants";
+import { timestampToIso } from "@/services/idGenerator.service";
 
 export interface Staff {
   id: string;
@@ -24,6 +21,7 @@ export interface Staff {
   firebaseUid: string | null;
   name: string;
   email: string;
+  phone?: string;
   role: "staff";
   active: boolean;
   createdAt: string;
@@ -39,6 +37,7 @@ function mapStaffDoc(
     firebaseUid: (data.firebaseUid as string) ?? null,
     name: data.name as string,
     email: data.email as string,
+    phone: (data.phone as string) ?? "",
     role: "staff",
     active: (data.active as boolean) ?? true,
     createdAt: timestampToIso(data.createdAt as never),
@@ -59,9 +58,10 @@ export async function getStaffByEmail(
 
   if (snap.empty) return null;
 
-  const docSnap = snap.docs[0];
-
-  return mapStaffDoc(docSnap.id, docSnap.data());
+  return mapStaffDoc(
+    snap.docs[0].id,
+    snap.docs[0].data()
+  );
 }
 
 export async function getStaffByUid(
@@ -78,12 +78,34 @@ export async function getStaffByUid(
 
   if (snap.empty) return null;
 
-  const docSnap = snap.docs[0];
+  return mapStaffDoc(
+    snap.docs[0].id,
+    snap.docs[0].data()
+  );
+}
 
-  return mapStaffDoc(docSnap.id, docSnap.data());
+export async function getStaffByPhone(
+  phone: string
+): Promise<(Staff & Record<string, unknown>) | null> {
+
+  const q = query(
+    collection(db, COLLECTIONS.staff),
+    where("phone", "==", phone),
+    limit(1)
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) return null;
+
+  return {
+    id: snap.docs[0].id,
+    ...(snap.docs[0].data() as Record<string, unknown>),
+  } as Staff & Record<string, unknown>;
 }
 
 export async function getStaff() {
+
   const q = query(
     collection(db, COLLECTIONS.staff),
     orderBy("createdAt", "desc")
@@ -96,7 +118,10 @@ export async function getStaff() {
   );
 }
 
-export async function createStaff(data: Record<string, unknown>) {
+export async function createStaff(
+  data: Record<string, unknown>
+) {
+
   return await addDoc(
     collection(db, COLLECTIONS.staff),
     {
@@ -111,6 +136,7 @@ export async function updateStaff(
   id: string,
   data: Record<string, unknown>
 ) {
+
   return await updateDoc(
     doc(db, COLLECTIONS.staff, id),
     {
@@ -123,6 +149,7 @@ export async function updateStaff(
 export async function deleteStaff(
   id: string
 ) {
+
   return await deleteDoc(
     doc(db, COLLECTIONS.staff, id)
   );
@@ -143,25 +170,27 @@ export async function getStaffByStaffId(
   console.log("About to query Firestore...");
 
   try {
+
     const snap = await getDocs(q);
 
-   console.log("Empty:", snap.empty);
+    console.log("Empty:", snap.empty);
 
-if (!snap.empty) {
-  console.log("Staff data:", snap.docs[0].data());
-}
+    if (!snap.empty) {
+      console.log("Staff data:", snap.docs[0].data());
+    }
+
     if (snap.empty) return null;
 
-    const docSnap = snap.docs[0];
-
     return {
-      id: docSnap.id,
-      ...(docSnap.data() as Record<string, unknown>),
+      id: snap.docs[0].id,
+      ...(snap.docs[0].data() as Record<string, unknown>),
     } as Staff & Record<string, unknown>;
 
   } catch (e) {
+
     console.error("🔥 Firestore Error:", e);
     throw e;
+
   }
 }
 
@@ -183,6 +212,7 @@ export async function completeStaffProfile(
     googleLinked?: boolean;
   }
 ) {
+
   return await updateDoc(
     doc(db, COLLECTIONS.staff, id),
     {
