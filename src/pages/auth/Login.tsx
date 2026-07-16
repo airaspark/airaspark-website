@@ -3,28 +3,23 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "motion/react";
 import {
   Mail,
-
-  Phone,
   UserCircle,
   Chrome,
   ArrowRight,
   Eye,
   EyeOff,
 } from "lucide-react";
-import type { ConfirmationResult } from "firebase/auth";
 import {
   signInWithGoogle,
   signInWithEmail,
   signInWithPortalId,
-  sendPhoneOtp,
-  verifyPhoneOtp,
 } from "@/services/auth.service";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
 import { ROLE_DASHBOARD_PATHS } from "@/utils/constants";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 
-type LoginTab = "email" | "phone" | "login";
+type LoginTab = "email" | "login";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -41,13 +36,7 @@ export default function Login() {
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-const [showLoginPassword, setShowLoginPassword] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [confirmation, setConfirmation] = useState<ConfirmationResult | null>(
-    null
-  );
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   const from =
     (location.state as { from?: { pathname: string } })?.from?.pathname ??
@@ -132,54 +121,11 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
       toast.success("Welcome back!");
       redirectAfterLogin(profile.role);
     } catch (err) {
-  console.log("LOGIN ERROR:", err);
-
-  if (err instanceof Error) {
-    console.log("MESSAGE:", err.message);
-  }
-
-  if (err instanceof Error && err.message === "FIRST_LOGIN") {
-    console.log("GOING TO COMPLETE PROFILE...");
-    navigate("/staff/complete-profile");
-    return;
-  }
-
-  toast.error(err instanceof Error ? err.message : "Login failed");
-}finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleSendOtp(e: FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const formatted = phone.startsWith("+") ? phone : `+91${phone}`;
-      const result = await sendPhoneOtp(formatted, "recaptcha-container");
-      setConfirmation(result);
-      setOtpSent(true);
-      toast.success("OTP sent to your phone");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to send OTP");
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleVerifyOtp(e: FormEvent) {
-    e.preventDefault();
-    if (!confirmation) return;
-    setSubmitting(true);
-    try {
-      const profile = await verifyPhoneOtp(confirmation, otp, rememberMe);
-      toast.success("Phone verified!");
-      if (profile.role === "pending" || (profile.role === "customer" && !profile.isLinked)) {
-        navigate("/link-account", { replace: true });
-      } else {
-        redirectAfterLogin(profile.role);
+      if (err instanceof Error && err.message === "FIRST_LOGIN") {
+        navigate("/staff/complete-profile");
+        return;
       }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Invalid OTP");
+      toast.error(err instanceof Error ? err.message : "Login failed");
     } finally {
       setSubmitting(false);
     }
@@ -231,10 +177,6 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
         <button className={tabClass("email")} onClick={() => setTab("email")}>
           <Mail className="w-3.5 h-3.5 inline mr-1" />
           Email
-        </button>
-        <button className={tabClass("phone")} onClick={() => setTab("phone")}>
-          <Phone className="w-3.5 h-3.5 inline mr-1" />
-          Phone
         </button>
         <button
           className={tabClass("login")}
@@ -302,51 +244,6 @@ const [showLoginPassword, setShowLoginPassword] = useState(false);
           </div>
           <button type="submit" disabled={submitting} className="portal-btn-primary w-full">
             Sign In
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </form>
-      )}
-
-      {tab === "phone" && (
-        <form
-          onSubmit={otpSent ? handleVerifyOtp : handleSendOtp}
-          className="space-y-4"
-        >
-          {!otpSent ? (
-            <div>
-              <label className="portal-label">Phone Number</label>
-              <div className="relative">
-                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--portal-muted)]" />
-                <input
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="portal-input pl-15"
-                  placeholder=""
-                />
-              </div>
-            </div>
-          ) : (
-            <div>
-              <label className="portal-label">Enter OTP</label>
-              <input
-                type="text"
-                required
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                className="portal-input text-center text-2xl tracking-[0.5em]"
-                placeholder="000000"
-              />
-            </div>
-          )}
-          <div id="recaptcha-container" />
-          
-          <button type="submit" disabled={submitting} className="portal-btn-primary w-full">
-            {otpSent ? "Verify OTP" : "Send OTP"}
-            
-
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
