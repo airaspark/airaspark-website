@@ -5,14 +5,20 @@ import { getStorage } from "firebase-admin/storage";
 
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
 console.log("Initializing Firebase Admin (modular)");
 
-const keyPath = path.resolve(
-  new URL(import.meta.url).pathname,
-  "../firebase-admin-key.json"
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+const keyPath = path.join(
+  
+  __dirname,
+  "firebase-admin-key.json"
+  
+);
+console.log("Looking for Firebase key at:", keyPath);
 let serviceAccount = null;
 
 try {

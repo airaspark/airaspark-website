@@ -12,6 +12,9 @@ import staffInvoiceRoutes from "./api/staffInvoices.js";
 import receiptRoutes from "./routes/receipt.routes.js";
 import receiptFilesRoutes from "./api/receiptFiles.js";
 import customerReceiptRoutes from "./api/receipts.js";
+import dashboardRoutes from "./api/dashboard.js";
+import staffDashboardRoutes from "./api/staffDashboard.js";
+import staffCustomersRoutes from "./api/staffCustomers.js";
 
 dotenv.config();
 
@@ -46,6 +49,9 @@ app.use("/api/auth", authRoutes);
 // ==============================
 
 app.use("/api/payments", paymentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/dashboard", staffDashboardRoutes);
+app.use("/api/staff", staffCustomersRoutes);
 
 // ==============================
 
