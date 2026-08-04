@@ -54,6 +54,7 @@ import StaffPayments from "@/pages/staff/Payments";
 import StaffReceipts from "@/pages/staff/Receipts";
 import CustomerInvoices from "@/pages/customer/Invoices";
 import StaffInvoices from "@/pages/staff/Invoices";
+import StaffCustomers from "@/pages/staff/Customers";
 
 const customerNav = [
   { label: "Dashboard", path: "/customer/dashboard", icon: LayoutDashboard },
@@ -77,8 +78,8 @@ const staffNav = [
 
  { label: "Receipts", path: "/staff/receipts", icon: Receipt },
   { label: "Daily Reports", path: "/staff/daily-reports", icon: FileText },
-  { label: "Milestones", path: "/staff/milestones", icon: Milestone },
-  { label: "Documents", path: "/staff/documents", icon: Files },
+  
+  
   { label: "Invoices", path: "/staff/invoices", icon: FileText },
 ];
 
@@ -210,7 +211,10 @@ export default function AppRoutes() {
 
     <Route path="dashboard" element={<StaffDashboard />} />
     <Route path="daily-reports" element={<DailyReports />} />
-        <Route path="customers" element={<PlaceholderPage title="Assigned Customers" />} />
+        <Route
+  path="customers"
+  element={<StaffCustomers />}
+/>
         <Route path="projects" element={<Projects />} />
         <Route
   path="projects/:id"
