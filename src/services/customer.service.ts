@@ -12,11 +12,12 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import bcrypt from "bcryptjs";
-import { db } from "@/firebase";
+import { db, storage } from "@/firebase";
 import { COLLECTIONS } from "@/utils/constants";
 import { timestampToIso } from "@/services/idGenerator.service";
-import type { Customer } from "@/types";
+import type { Customer, DocumentRecord, Review } from "@/types";
 
 function mapCustomerDoc(
   id: string,
@@ -32,6 +33,9 @@ function mapCustomerDoc(
     company: data.company as string,
     email: data.email as string,
     phone: data.phone as string,
+    website: (data.website as string) ?? "",
+    gst: (data.gst as string) ?? "",
+    industry: (data.industry as string) ?? "",
     assignedStaffIds: (data.assignedStaffIds as string[]) ?? [],
     isActive: data.isActive !== false,
     createdAt: timestampToIso(data.createdAt as never),
@@ -189,6 +193,112 @@ export async function deleteCustomer(
   await deleteDoc(
     doc(db, COLLECTIONS.customers, id)
   );
+}
+
+export async function getDocumentsByCustomer(
+  customerId: string
+): Promise<DocumentRecord[]> {
+  const q = query(
+    collection(db, COLLECTIONS.documents),
+    where("customerId", "==", customerId),
+    orderBy("createdAt", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((docSnap) => {
+    const data = docSnap.data() as Record<string, unknown>;
+    return {
+      id: docSnap.id,
+      documentId: data.documentId as string,
+      projectId: (data.projectId as string) ?? "",
+      customerId: data.customerId as string,
+      name: data.name as string,
+      type: data.type as string,
+      storagePath: data.storagePath as string,
+      uploadedBy: data.uploadedBy as string,
+      downloadUrl: data.downloadUrl as string,
+      createdAt: timestampToIso(data.createdAt as never),
+      updatedAt: timestampToIso(data.updatedAt as never),
+    };
+  });
+}
+
+export async function uploadCustomerDocument(
+  customerId: string,
+  file: File,
+  uploadedBy: string
+): Promise<DocumentRecord> {
+  const storageRef = ref(
+    storage,
+    `documents/${customerId}/${Date.now()}-${file.name}`
+  );
+
+  await uploadBytes(storageRef, file);
+
+  const downloadUrl = await getDownloadURL(storageRef);
+
+  const documentId = `DOC-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
+
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.documents),
+    {
+      documentId,
+      customerId,
+      projectId: "",
+      name: file.name,
+      type: file.type || "document",
+      storagePath: storageRef.fullPath,
+      downloadUrl,
+      uploadedBy,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  );
+
+  return {
+    id: docRef.id,
+    documentId,
+    customerId,
+    projectId: "",
+    name: file.name,
+    type: file.type || "document",
+    storagePath: storageRef.fullPath,
+    uploadedBy,
+    downloadUrl,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export async function getReviewsByCustomer(
+  customerId: string
+): Promise<Review[]> {
+  const q = query(
+    collection(db, COLLECTIONS.reviews),
+    where("customerId", "==", customerId),
+    orderBy("createdAt", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((docSnap) => {
+    const data = docSnap.data() as Record<string, unknown>;
+    return {
+      id: docSnap.id,
+      reviewId: data.reviewId as string,
+      name: data.name as string,
+      company: data.company as string,
+      email: data.email as string,
+      content: data.content as string,
+      rating: (data.rating as number) ?? null,
+      status: (data.status as string) as Review["status"],
+      customerId: (data.customerId as string | null) ?? null,
+      isPublic: Boolean(data.isPublic),
+      createdAt: timestampToIso(data.createdAt as never),
+      updatedAt: timestampToIso(data.updatedAt as never),
+    };
+  });
 }
 
 export async function getCustomerById(

@@ -79,7 +79,7 @@ export default function Login() {
     try {
       const profile = await signInWithGoogle(rememberMe);
       toast.success("Signed in with Google");
-      if (profile.role === "pending" || (profile.role === "customer" && !profile.isLinked)) {
+      if (profile.role === "pending") {
         navigate("/link-account", { replace: true });
       } else {
         redirectAfterLogin(profile.role);
@@ -97,7 +97,7 @@ export default function Login() {
     try {
       const profile = await signInWithEmail(email, password, rememberMe);
       toast.success("Welcome back!");
-      if (profile.role === "pending" || (profile.role === "customer" && !profile.isLinked)) {
+      if (profile.role === "pending") {
         navigate("/link-account", { replace: true });
       } else {
         redirectAfterLogin(profile.role);
@@ -259,7 +259,7 @@ export default function Login() {
               value={loginId}
               onChange={(e) => setLoginId(e.target.value.toUpperCase())}
               className="portal-input font-mono"
-              placeholder="ADM-2026-001 / STF-2026-001 / ASC-2026-001"
+              placeholder="Enter your Login ID"
             />
           </div>
          <div>

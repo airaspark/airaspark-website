@@ -4,14 +4,27 @@ import {
   FolderPlus,
   FileText,
   Archive,
+  CreditCard,
+  Receipt,
+  Upload,
 } from "lucide-react";
 
-import type { Customer } from "@/types";
+import type { Customer, UserRole } from "@/types";
 
-export default function CustomerActions({ customer }: { customer: Customer }) {
+interface CustomerActionsProps {
+  customer: Customer;
+  role: UserRole;
+}
+
+export default function CustomerActions({
+  customer,
+  role,
+}: CustomerActionsProps) {
+  const isAdmin = role === "admin";
+  const isStaff = role === "staff";
+
   return (
     <div className="rounded-2xl border border-gray-700 bg-gray-900 p-6">
-
       <h2 className="mb-5 text-xl font-bold">
         Actions for {customer.name}
       </h2>
@@ -24,33 +37,57 @@ export default function CustomerActions({ customer }: { customer: Customer }) {
           color="bg-blue-600"
         />
 
-        <ActionButton
-          icon={<UserPlus size={18} />}
-          text="Assign Staff"
-          color="bg-purple-600"
-        />
+        {(isAdmin || isStaff) && (
+          <>
+            <ActionButton
+              icon={<FolderPlus size={18} />}
+              text="Create Project"
+              color="bg-green-600"
+            />
 
-        <ActionButton
-          icon={<FolderPlus size={18} />}
-          text="Create Project"
-          color="bg-green-600"
-        />
+            <ActionButton
+              icon={<FileText size={18} />}
+              text="Generate Invoice"
+              color="bg-yellow-500"
+            />
 
-        <ActionButton
-          icon={<FileText size={18} />}
-          text="Generate Invoice"
-          color="bg-yellow-500"
-        />
+            <ActionButton
+              icon={<CreditCard size={18} />}
+              text="Record Payment"
+              color="bg-emerald-600"
+            />
 
-        <button className="w-full rounded-xl border border-red-500 py-3 text-red-400 hover:bg-red-500/10">
-          <div className="flex items-center justify-center gap-2">
-            <Archive size={18} />
-            Archive Customer
-          </div>
-        </button>
+            <ActionButton
+              icon={<Receipt size={18} />}
+              text="Generate Receipt"
+              color="bg-cyan-600"
+            />
 
+            <ActionButton
+              icon={<Upload size={18} />}
+              text="Upload Document"
+              color="bg-indigo-600"
+            />
+          </>
+        )}
+
+        {isAdmin && (
+          <>
+            <ActionButton
+              icon={<UserPlus size={18} />}
+              text="Assign Staff"
+              color="bg-purple-600"
+            />
+
+            <button className="w-full rounded-xl border border-red-500 py-3 text-red-400 hover:bg-red-500/10">
+              <div className="flex items-center justify-center gap-2">
+                <Archive size={18} />
+                Archive Customer
+              </div>
+            </button>
+          </>
+        )}
       </div>
-
     </div>
   );
 }

@@ -94,7 +94,7 @@ export default function LinkCustomerAccount() {
               value={portalId}
               onChange={(e) => setPortalId(e.target.value.toUpperCase())}
               className="portal-input pl-10 font-mono"
-              placeholder="ADM-2026-001 / STF-2026-001 / ASC-2026-001"
+              placeholder="Enter your Login ID"
             />
           </div>
         </div>

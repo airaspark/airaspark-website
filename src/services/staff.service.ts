@@ -14,6 +14,7 @@ import {
 import { db } from "@/firebase";
 import { COLLECTIONS } from "@/utils/constants";
 import { timestampToIso } from "@/services/idGenerator.service";
+import { auth } from "@/firebase";
 
 export interface Staff {
   id: string;
@@ -159,6 +160,11 @@ export async function getStaffByStaffId(
   staffId: string
 ): Promise<(Staff & Record<string, unknown>) | null> {
 
+  console.log("========== STAFF LOGIN ==========");
+  console.log("Current User:", auth.currentUser);
+  console.log("UID:", auth.currentUser?.uid);
+  console.log("Authenticated:", !!auth.currentUser);
+
   console.log("Searching staff:", staffId);
 
   const q = query(
@@ -170,7 +176,6 @@ export async function getStaffByStaffId(
   console.log("About to query Firestore...");
 
   try {
-
     const snap = await getDocs(q);
 
     console.log("Empty:", snap.empty);
@@ -187,10 +192,8 @@ export async function getStaffByStaffId(
     } as Staff & Record<string, unknown>;
 
   } catch (e) {
-
     console.error("🔥 Firestore Error:", e);
     throw e;
-
   }
 }
 

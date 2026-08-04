@@ -11,12 +11,12 @@ import CustomerInvoices from "@/components/admin/customer/CustomerInvoices";
 import CustomerPayments from "@/components/admin/customer/CustomerPayments";
 import CustomerDocuments from "@/components/admin/customer/CustomerDocuments";
 import CustomerTimeline from "@/components/admin/customer/CustomerTimeline";
-
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function CustomerProfile() {
   
 const { id } = useParams();
-
+const { user } = useAuthContext();
 const [customer, setCustomer] = useState<Customer | null>(null);
 const [loading, setLoading] = useState(true);
 
@@ -77,7 +77,10 @@ if (!customer) {
        
 
         <div className="col-span-3">
-          <CustomerActions customer={customer} />
+        <CustomerActions
+  customer={customer}
+  role={user!.role}
+/>
         </div>
 
       </div>

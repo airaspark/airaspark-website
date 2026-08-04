@@ -23,6 +23,8 @@ export const COLLECTIONS = {
   admins: "admins",
   projects: "projects",
   payments: "payments",
+  installments: "installments",
+  receipts: "receipts",
   paymentRequests: "paymentRequests",
   milestones: "milestones",
   documents: "documents",

@@ -19,6 +19,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import Customers from "@/pages/admin/Customers";
 import CustomerProfile from "@/pages/admin/CustomerProfile";
 import Projects from "@/pages/admin/Projects";
+import AdminInvoices from "@/pages/admin/Invoices";
 
 import Home from "@/pages/Home";
 import Review from "@/pages/Review";
@@ -44,25 +45,37 @@ import CompleteProfile from "@/pages/staff/CompleteProfile";
 import CompleteProfileForm from "@/components/staff/CompleteProfileForm";
 import DailyReports from "@/pages/staff/DailyReports";
 import AdminDailyReports from "@/pages/admin/DailyReports";
+import CustomerProjects from "@/pages/customer/Projects";
+import CustomerPayments from "@/pages/customer/Payments";
+import AdminPayments from "@/pages/admin/Payments";
+import Receipts from "@/pages/customer/Receipts";
+import AdminReceipts from "@/pages/admin/Receipts";
+import StaffPayments from "@/pages/staff/Payments";
+import StaffReceipts from "@/pages/staff/Receipts";
+import CustomerInvoices from "@/pages/customer/Invoices";
+import StaffInvoices from "@/pages/staff/Invoices";
 
 const customerNav = [
   { label: "Dashboard", path: "/customer/dashboard", icon: LayoutDashboard },
   { label: "Projects", path: "/customer/projects", icon: FolderKanban },
   { label: "Invoices", path: "/customer/invoices", icon: FileText },
   { label: "Payments", path: "/customer/payments", icon: CreditCard },
-  { label: "Milestones", path: "/customer/milestones", icon: Milestone },
-  { label: "Documents", path: "/customer/documents", icon: Files },
-  { label: "Quotations", path: "/customer/quotations", icon: ScrollText },
   { label: "Agreements", path: "/customer/agreements", icon: FileCheck },
   { label: "Receipts", path: "/customer/receipts", icon: Receipt },
-  { label: "Certificates", path: "/customer/certificates", icon: Award },
-  { label: "Reviews", path: "/customer/reviews", icon: Star },
 ];
 
 const staffNav = [
   { label: "Dashboard", path: "/staff/dashboard", icon: LayoutDashboard },
   { label: "Customers", path: "/staff/customers", icon: FolderKanban },
   { label: "Projects", path: "/staff/projects", icon: FolderKanban },
+  {
+  label: "Payments",
+  path: "/staff/payments",
+  icon: CreditCard,
+},
+
+
+ { label: "Receipts", path: "/staff/receipts", icon: Receipt },
   { label: "Daily Reports", path: "/staff/daily-reports", icon: FileText },
   { label: "Milestones", path: "/staff/milestones", icon: Milestone },
   { label: "Documents", path: "/staff/documents", icon: Files },
@@ -85,6 +98,8 @@ const adminNav = [
   { label: "Projects", path: "/admin/projects", icon: FolderKanban },
 
   { label: "Payments", path: "/admin/payments", icon: CreditCard },
+
+  { label: "Receipts", path: "/admin/receipts", icon: Receipt },
 
   { label: "Invoices", path: "/admin/invoices", icon: FileText },
 
@@ -141,20 +156,18 @@ export default function AppRoutes() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<CustomerDashboard />} />
       
-       <Route
-          path="projects"
-          element={<Projects />}
-        />
+       <Route path="projects" element={<CustomerProjects />} />
 
-        <Route path="invoices" element={<PlaceholderPage title="Invoices" />} />
-        <Route path="payments" element={<PlaceholderPage title="Payments" />} />
-        <Route path="milestones" element={<PlaceholderPage title="Milestones" />} />
+        <Route
+  path="invoices"
+  element={<CustomerInvoices />}
+/>
+        <Route path="payments" element={<CustomerPayments />} />
+       
         <Route path="documents" element={<PlaceholderPage title="Documents" />} />
-        <Route path="quotations" element={<PlaceholderPage title="Quotations" />} />
+        
         <Route path="agreements" element={<PlaceholderPage title="Agreements" />} />
-        <Route path="receipts" element={<PlaceholderPage title="Receipts" />} />
-        <Route path="certificates" element={<PlaceholderPage title="Completion Certificates" />} />
-        <Route path="reviews" element={<PlaceholderPage title="Reviews" />} />
+        <Route path="receipts" element={<Receipts />} />
         <Route path="profile" element={<PortalProfile />} />
         <Route path="settings" element={<PortalSettings />} />
         <Route path="change-password" element={<ChangePassword />} />
@@ -204,8 +217,10 @@ export default function AppRoutes() {
   element={<ProjectDetails />}
 />
         <Route path="milestones" element={<PlaceholderPage title="Milestones" />} />
+        <Route path="payments" element={<StaffPayments />} />
+<Route path="receipts" element={<StaffReceipts />} />
         <Route path="documents" element={<PlaceholderPage title="Documents" />} />
-        <Route path="invoices" element={<PlaceholderPage title="Invoices" />} />
+        <Route path="invoices" element={<StaffInvoices />} />
         <Route path="profile" element={<PortalProfile />} />
         <Route path="settings" element={<PortalSettings />} />
         <Route path="change-password" element={<ChangePassword />} />
@@ -247,8 +262,9 @@ export default function AppRoutes() {
   path="projects/:id"
   element={<ProjectDetails />}
 />
-  <Route path="payments" element={<PlaceholderPage title="Payments" />} />
-  <Route path="invoices" element={<PlaceholderPage title="Invoices" />} />
+  <Route path="payments" element={<AdminPayments />} />
+  <Route path="receipts" element={<AdminReceipts />} />
+  <Route path="invoices" element={<AdminInvoices />} />
   <Route path="reviews" element={<PlaceholderPage title="Reviews" />} />
   <Route path="documents" element={<PlaceholderPage title="Documents" />} />
   <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />

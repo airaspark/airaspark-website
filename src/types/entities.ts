@@ -16,7 +16,8 @@ export type IdPrefix =
   | "REV";
 
 export type ReviewStatus = "pending" | "approved" | "rejected";
-export type PaymentStatus = "pending" | "completed" | "failed" | "refunded";
+export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
+export type PaymentPlan = "100_advance" | "50_50" | "30_40_30" | "custom";
 export type MilestoneStatus = "locked" | "pay_now" | "paid";
 export type PaymentRequestStatus = "pending" | "approved" | "rejected";
 
@@ -35,6 +36,9 @@ export interface Customer extends BaseEntity {
   company: string;
   email: string;
   phone: string;
+  website?: string;
+  gst?: string;
+  industry?: string;
   assignedStaffIds: string[];
   isActive: boolean;
 }
@@ -93,7 +97,8 @@ export interface Project extends BaseEntity {
   startDate: string;
   deadline: string;
 
-  milestonePercentages: [number, number, number];
+  paymentPlan: PaymentPlan;
+  milestonePercentages: number[];
 }
 
 export interface Invoice extends BaseEntity {
@@ -107,13 +112,61 @@ export interface Invoice extends BaseEntity {
 
 export interface Payment extends BaseEntity {
   paymentId: string;
-  invoiceId: string;
   projectId: string;
   customerId: string;
+  installmentId: string;
   amount: number;
   status: PaymentStatus;
+  razorpayOrderId: string | null;
   razorpayPaymentId: string | null;
-  milestoneIndex: number | null;
+  method: string | null;
+  paidAt: string | null;
+}
+
+export interface Installment extends BaseEntity {
+  installmentId: string;
+  projectId: string;
+  customerId: string;
+
+  sequence: number;
+  percentage: number;
+  amount: number;
+
+  status: PaymentStatus;
+
+  locked: boolean;
+
+  dueDate: string | null;
+
+  paidAt: string | null;
+  paymentId: string | null;
+}
+
+export interface Receipt extends BaseEntity {
+  receiptId: string;
+  receiptNumber: string;
+
+  installmentId: string;
+
+  invoiceNumber?: string;
+
+  paymentId: string;
+
+  projectId: string;
+  customerId: string;
+
+  customerName: string;
+  projectName: string;
+
+  amount: number;
+
+  paymentMethod: string | null;
+
+  razorpayPaymentId: string;
+
+  paymentDate: string;
+
+  pdfUrl: string | null;
 }
 
 export interface PaymentRequest extends BaseEntity {
@@ -144,6 +197,7 @@ export interface DocumentRecord extends BaseEntity {
   type: string;
   storagePath: string;
   uploadedBy: string;
+  downloadUrl: string;
 }
 
 export interface Review extends BaseEntity {
@@ -191,5 +245,5 @@ export interface IdCounter {
   project: number;
   invoice: number;
   payment: number;
- review: number;
+  review: number;
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   getProjects,
+  getProjectsByCustomer,
   deleteProject,
 } from "@/services/project.service";
 import type { Project } from "@/types";
@@ -11,12 +13,16 @@ export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [searchParams] = useSearchParams();
+  const customerId = searchParams.get("customerId") ?? "";
 
   async function loadProjects() {
     try {
       setLoading(true);
 
-      const data = await getProjects();
+      const data = customerId
+        ? await getProjectsByCustomer(customerId)
+        : await getProjects();
 
       setProjects(data);
     } catch (error) {

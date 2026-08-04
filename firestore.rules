@@ -146,6 +146,20 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /installments/{installmentId} {
+      allow read: if isAdmin()
+        || isStaff()
+        || (isCustomer() && resource.data.customerId == getUserData().entityId);
+      allow write: if isAdmin() || isStaff();
+    }
+
+    match /receipts/{receiptId} {
+      allow read: if isAdmin()
+        || isStaff()
+        || (isCustomer() && resource.data.customerId == getUserData().entityId);
+      allow write: if isAdmin();
+    }
+
     // ===========================
     // PAYMENT REQUESTS
     // ===========================

@@ -14,8 +14,8 @@ import { COLLECTIONS } from "@/utils/constants";
 import { serverTimestamp, timestampToIso } from "@/services/idGenerator.service";
 import type { UserProfile, UserRole } from "@/types";
 import { getAdminByUid } from "@/services/admin.service";
-import { getStaffByUid } from "@/services/staff.service";
-import { getCustomerByFirebaseUid } from "@/services/customer.service";
+import { getStaffByUid, getStaffByEmail, getStaffByPhone } from "@/services/staff.service";
+import { getCustomerByFirebaseUid, getCustomerByPhone } from "@/services/customer.service";
 
 function mapUserDoc(uid: string, data: Record<string, unknown>): UserProfile {
   return {
@@ -105,6 +105,116 @@ export async function updateUserProfile(
   });
 }
 
+function normalizeEmail(email: string | null | undefined): string | null {
+  const trimmed = email?.trim().toLowerCase();
+  return trimmed ? trimmed : null;
+}
+
+function normalizePhone(phone: string | null | undefined): string | null {
+  if (!phone) return null;
+  const trimmed = phone.trim();
+  if (!trimmed) return null;
+  const compact = trimmed.replace(/[\s-]/g, "");
+  const digits = compact.replace(/\D/g, "");
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length === 12 && digits.startsWith("91")) return `+${digits}`;
+  if (compact.startsWith("+")) return compact;
+  if (compact.startsWith("91") && compact.length > 10) return `+${compact}`;
+  return compact;
+}
+
+function buildPhoneCandidates(phone: string | null | undefined): string[] {
+  const candidates = new Set<string>();
+  if (!phone) return [];
+  const trimmed = phone.trim();
+  if (!trimmed) return [];
+  candidates.add(trimmed);
+  const compact = trimmed.replace(/[\s-]/g, "");
+  if (compact) candidates.add(compact);
+  const normalized = normalizePhone(trimmed);
+  if (normalized) candidates.add(normalized);
+  const digits = normalized?.replace(/^\+/, "") ?? null;
+  if (digits) candidates.add(digits);
+  if (digits?.startsWith("91")) candidates.add(digits.slice(2));
+  return Array.from(candidates);
+}
+
+async function findDocByField(
+  collectionName: string,
+  field: string,
+  value: string
+): Promise<{ id: string; data: Record<string, unknown> } | null> {
+  const q = query(collection(db, collectionName), where(field, "==", value), limit(1));
+  const snap = await getDocs(q);
+  if (snap.empty) return null;
+  return { id: snap.docs[0].id, data: snap.docs[0].data() as Record<string, unknown> };
+}
+
+async function findAdminMatch(
+  uid: string,
+  email: string | null,
+  phone: string | null
+): Promise<{ id: string; data: Record<string, unknown> } | null> {
+  const adminByUid = await getAdminByUid(uid);
+  if (adminByUid) return { id: adminByUid.id, data: adminByUid as unknown as Record<string, unknown> };
+
+  if (email) {
+    const byEmail = await findDocByField(COLLECTIONS.admins, "email", email);
+    if (byEmail) return byEmail;
+  }
+
+  for (const candidate of buildPhoneCandidates(phone)) {
+    const byPhone = await findDocByField(COLLECTIONS.admins, "phone", candidate);
+    if (byPhone) return byPhone;
+  }
+
+  return null;
+}
+
+async function findStaffMatch(
+  uid: string,
+  email: string | null,
+  phone: string | null
+): Promise<{ id: string; data: Record<string, unknown> } | null> {
+  const staffByUid = await getStaffByUid(uid);
+  if (staffByUid) return { id: staffByUid.id, data: staffByUid as unknown as Record<string, unknown> };
+
+  if (email) {
+    const byEmail = await getStaffByEmail(email);
+    if (byEmail) return { id: byEmail.id, data: byEmail as unknown as Record<string, unknown> };
+  }
+
+  for (const candidate of buildPhoneCandidates(phone)) {
+    const byPhone = await getStaffByPhone(candidate);
+    if (byPhone) return { id: byPhone.id, data: byPhone as Record<string, unknown> };
+  }
+
+  return null;
+}
+
+async function findCustomerMatch(
+  uid: string,
+  email: string | null,
+  phone: string | null
+): Promise<{ id: string; data: Record<string, unknown> } | null> {
+  const customerByUid = await getCustomerByFirebaseUid(uid);
+  if (customerByUid) return { id: customerByUid.id, data: customerByUid as unknown as Record<string, unknown> };
+
+  if (email) {
+    const byAuthEmail = await findDocByField(COLLECTIONS.customers, "authEmail", email);
+    if (byAuthEmail) return byAuthEmail;
+    const byEmail = await findDocByField(COLLECTIONS.customers, "email", email);
+    if (byEmail) return byEmail;
+  }
+
+  for (const candidate of buildPhoneCandidates(phone)) {
+    const byPhone = await getCustomerByPhone(candidate);
+    if (byPhone) return { id: byPhone.id, data: byPhone as unknown as Record<string, unknown> };
+  }
+
+  return null;
+}
+
 export async function upsertUserFromAuth(
   uid: string,
   authData: {
@@ -114,125 +224,124 @@ export async function upsertUserFromAuth(
     photoURL: string | null;
   }
 ): Promise<UserProfile> {
+  const existing = await getUserProfile(uid);
+  const normalizedEmail = normalizeEmail(authData.email);
+  const normalizedPhone = normalizePhone(authData.phone);
 
- const existing = await getUserProfile(uid);
+  const admin = await findAdminMatch(uid, normalizedEmail, normalizedPhone);
+  if (admin) {
+    if ((admin.data.firebaseUid as string | null) !== uid) {
+      await updateDoc(doc(db, COLLECTIONS.admins, admin.id), {
+        firebaseUid: uid,
+        updatedAt: serverTimestamp(),
+      });
+    }
 
-if (existing) {
+    if (existing) {
+      await updateUserProfile(uid, {
+        role: "admin",
+        entityId: admin.data.adminId as string,
+        isLinked: true,
+        email: authData.email ?? existing.email,
+        phone: authData.phone ?? existing.phone,
+        displayName: authData.displayName ?? existing.displayName,
+        photoURL: authData.photoURL ?? existing.photoURL,
+        lastLoginAt: new Date().toISOString(),
+      });
+      return (await getUserProfile(uid))!;
+    }
 
- await updateUserProfile(uid, {
-  email: authData.email ?? existing.email,
-  phone: authData.phone ?? existing.phone,
-  displayName: authData.displayName ?? existing.displayName,
-  photoURL: authData.photoURL ?? existing.photoURL,
-  lastLoginAt: new Date().toISOString(),
-});
-
-  // If already linked, just return it
-  if (existing.role !== "pending") {
-    return (await getUserProfile(uid))!;
+    return createUserProfile(uid, {
+      ...authData,
+      role: "admin",
+      entityId: admin.data.adminId as string,
+      isLinked: true,
+    });
   }
 
-}
+  const staff = await findStaffMatch(uid, normalizedEmail, normalizedPhone);
+  if (staff) {
+    if ((staff.data.firebaseUid as string | null) !== uid) {
+      await updateDoc(doc(db, COLLECTIONS.staff, staff.id), {
+        firebaseUid: uid,
+        updatedAt: serverTimestamp(),
+      });
+    }
 
-// ------------------------
-// ADMIN
-// ------------------------
+    if (existing) {
+      await updateUserProfile(uid, {
+        role: "staff",
+        entityId: staff.data.staffId as string,
+        isLinked: true,
+        email: authData.email ?? existing.email,
+        phone: authData.phone ?? existing.phone,
+        displayName: authData.displayName ?? existing.displayName,
+        photoURL: authData.photoURL ?? existing.photoURL,
+        lastLoginAt: new Date().toISOString(),
+      });
+      return (await getUserProfile(uid))!;
+    }
 
-const admin = await getAdminByUid(uid);
-
-if (admin) {
-
-  if (existing) {
-
-   await updateUserProfile(uid, {
-  role: "admin",
-  entityId: admin.adminId,
-  isLinked: true,
-  email: authData.email ?? existing.email,
-  phone: authData.phone ?? existing.phone,
-  displayName: authData.displayName ?? existing.displayName,
-  photoURL: authData.photoURL ?? existing.photoURL,
-  lastLoginAt: new Date().toISOString(),
-});
-
-    return (await getUserProfile(uid))!;
+    return createUserProfile(uid, {
+      ...authData,
+      role: "staff",
+      entityId: staff.data.staffId as string,
+      isLinked: true,
+    });
   }
 
-  return createUserProfile(uid, {
-    ...authData,
-    role: "admin",
-    entityId: admin.adminId,
-    isLinked: true,
-  });
-}
+  const customer = await findCustomerMatch(uid, normalizedEmail, normalizedPhone);
+  if (customer) {
+    if ((customer.data.firebaseUid as string | null) !== uid) {
+      await updateDoc(doc(db, COLLECTIONS.customers, customer.id), {
+        firebaseUid: uid,
+        updatedAt: serverTimestamp(),
+      });
+    }
 
-console.log("❌ Admin NOT found");
+    if (existing) {
+      await updateUserProfile(uid, {
+        role: "customer",
+        entityId: customer.data.customerId as string,
+        isLinked: true,
+        email: authData.email ?? existing.email,
+        phone: authData.phone ?? existing.phone,
+        displayName: authData.displayName ?? existing.displayName,
+        photoURL: authData.photoURL ?? existing.photoURL,
+        lastLoginAt: new Date().toISOString(),
+      });
+      return (await getUserProfile(uid))!;
+    }
 
-  // ------------------------
-// STAFF
-// ------------------------
-
-const staff = await getStaffByUid(uid);
-
-if (staff) {
-
-  if (existing) {
-   await updateUserProfile(uid, {
-  role: "staff",
-  entityId: staff.staffId,
-  isLinked: true,
-  email: authData.email ?? existing.email,
-  phone: authData.phone ?? existing.phone,
-  displayName: authData.displayName ?? existing.displayName,
-  photoURL: authData.photoURL ?? existing.photoURL,
-  lastLoginAt: new Date().toISOString(),
-});
-
-    return (await getUserProfile(uid))!;
-  }
-
-  return createUserProfile(uid, {
-    ...authData,
-    role: "staff",
-    entityId: staff.staffId,
-    isLinked: true,
-  });
-}
-  // ------------------------
-// CUSTOMER
-// ------------------------
-
-const customer = await getCustomerByFirebaseUid(uid);
-
-if (customer) {
-
-  if (existing) {
-   await updateUserProfile(uid, {
+    return createUserProfile(uid, {
+  email: authData.email,
+  phone: authData.phone,
+  displayName: customer.data.name as string,
+  photoURL: authData.photoURL,
   role: "customer",
-  entityId: customer.customerId,
+  entityId: customer.data.customerId as string,
   isLinked: true,
-  email: authData.email ?? existing.email,
-  phone: authData.phone ?? existing.phone,
-  displayName: authData.displayName ?? existing.displayName,
-  photoURL: authData.photoURL ?? existing.photoURL,
-  lastLoginAt: new Date().toISOString(),
 });
+  }
 
+  if (existing) {
+    await updateUserProfile(uid, {
+      role: "pending",
+      entityId: null,
+      isLinked: false,
+      email: authData.email ?? existing.email,
+      phone: authData.phone ?? existing.phone,
+      displayName: authData.displayName ?? existing.displayName,
+      photoURL: authData.photoURL ?? existing.photoURL,
+      lastLoginAt: new Date().toISOString(),
+    });
     return (await getUserProfile(uid))!;
   }
 
-  return createUserProfile(uid, {
-    ...authData,
-    role: "customer",
-    entityId: customer.customerId,
-    isLinked: true,
-  });
-}
-
-  // NEW USER
   return createUserProfile(uid, {
     ...authData,
     role: "pending",
+    entityId: null,
     isLinked: false,
   });
 }

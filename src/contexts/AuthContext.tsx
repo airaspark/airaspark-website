@@ -37,6 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     const profile = await getUserProfile(fbUser.uid);
+    console.log("Firebase UID:", fbUser.uid);
+console.log("Firestore Profile:", profile);
     setUser(profile);
   }, []);
 
