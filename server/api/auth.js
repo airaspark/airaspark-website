@@ -127,6 +127,9 @@ if (!valid) {
     }
 
     // Create custom token
+    console.log("✅ Password Verified");
+
+console.log("Firebase UID:", targetUid);
     const customToken = await auth.createCustomToken(targetUid, { role: collectionName === 'admins' ? 'admin' : collectionName === 'staff' ? 'staff' : 'customer' });
 
     return res.json({
@@ -136,6 +139,11 @@ if (!valid) {
       entityId: doc.id,
       redirect: '/portal'
     });
+
+
+
+console.log("Custom Token Created");
+
   } catch (err) {
     console.error('Auth login error', err);
     return res.status(500).json({ success: false, message: 'Server error' });
