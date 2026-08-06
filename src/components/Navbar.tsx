@@ -59,29 +59,69 @@ export default function Navbar() {
   }, [isOpen]);
 
   const scrollToElement = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return false;
+  const element = document.getElementById(id);
 
-    const y = el.getBoundingClientRect().top + window.scrollY - 80;
-    window.scrollTo({ top: y, behavior: "smooth" });
-    setActiveSection(id);
-    return true;
-  };
+  if (!element) return false;
 
-  const scrollToSection = (id: string) => {
-    setIsOpen(false);
+  const y =
+    element.getBoundingClientRect().top +
+    window.pageYOffset -
+    80;
 
-    if (location.pathname !== "/") {
-      navigate("/");
-      const attemptScroll = (retries = 0) => {
-        if (scrollToElement(id) || retries >= 20) return;
-        setTimeout(() => attemptScroll(retries + 1), 50);
-      };
-      setTimeout(() => attemptScroll(), 100);
+  if (/Android/i.test(navigator.userAgent)) {
+    window.scrollTo(0, y);
+  } else {
+    window.scrollTo({
+      top: y,
+      behavior: "smooth",
+    });
+  }
+
+  setActiveSection(id);
+
+  return true;
+};
+
+ const scrollToSection = (id: string) => {
+  setIsOpen(false);
+
+  const performScroll = () => {
+    const element = document.getElementById(id);
+
+    if (!element) return;
+
+    const y =
+      element.getBoundingClientRect().top +
+      window.pageYOffset -
+      80;
+
+    // Android Chrome compatible
+    if (
+      /Android/i.test(navigator.userAgent)
+    ) {
+      window.scrollTo(0, y);
     } else {
-      scrollToElement(id);
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
     }
+
+    setActiveSection(id);
   };
+
+  if (location.pathname !== "/") {
+    navigate("/");
+
+    setTimeout(() => {
+      performScroll();
+    }, 250);
+  } else {
+    setTimeout(() => {
+      performScroll();
+    }, 100);
+  }
+};
 
   const navigateTo = (path: string) => {
     setIsOpen(false);

@@ -55,6 +55,7 @@ import StaffReceipts from "@/pages/staff/Receipts";
 import CustomerInvoices from "@/pages/customer/Invoices";
 import StaffInvoices from "@/pages/staff/Invoices";
 import StaffCustomers from "@/pages/staff/Customers";
+import Reviews from "@/pages/admin/Reviews";
 
 const customerNav = [
   { label: "Dashboard", path: "/customer/dashboard", icon: LayoutDashboard },
@@ -269,7 +270,7 @@ export default function AppRoutes() {
   <Route path="payments" element={<AdminPayments />} />
   <Route path="receipts" element={<AdminReceipts />} />
   <Route path="invoices" element={<AdminInvoices />} />
-  <Route path="reviews" element={<PlaceholderPage title="Reviews" />} />
+  <Route path="reviews" element={<Reviews />} />
   <Route path="documents" element={<PlaceholderPage title="Documents" />} />
   <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
   <Route path="activity" element={<PlaceholderPage title="Activity Logs" />} />

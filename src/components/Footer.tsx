@@ -130,7 +130,7 @@ export default function Footer() {
         {/* Dynamic bottom information and top-scroll */}
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <p className="text-xs text-[#A7B0C0]/60 font-mono text-center sm:text-left">
-           {currentYear} AIRASPARK TECHNOLOGIES. DESIGNED WITH PASSION AND CODED WITH PURPOSE.
+           {currentYear} AIRASPARK TECHNOLOGIES. ALL RIGHTS RESERVED.
           </p>
 
           <button

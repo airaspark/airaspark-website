@@ -1,47 +1,74 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import ReviewStats from "@/components/reviews/ReviewStats";
+import ReviewCard from "@/components/reviews/ReviewCard";
+import ReviewForm from "@/components/reviews/ReviewForm";
+
+import {
+  getApprovedReviews,
+  type Review,
+} from "@/services/review.service";
 
 export default function Review() {
-  const navigate = useNavigate();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  async function loadReviews() {
+  try {
+    console.log("Loading approved reviews...");
+
+    const data = await getApprovedReviews();
+
+    console.log("Approved Reviews:", data);
+
+    setReviews(data);
+  } catch (error) {
+    console.error("Review loading failed:", error);
+  } finally {
+    setLoading(false);
+  }
+}
+
+  useEffect(() => {
+    loadReviews();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#0B1220] text-white flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl bg-[#111827] rounded-2xl p-8 border border-[#4C8DFF]/20">
-        <h1 className="text-4xl font-bold mb-2">Client Reviews</h1>
-        <p className="text-gray-400 mb-6">We value your feedback.</p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            navigate("/thank-you");
-          }}
-          className="space-y-4"
-        >
-          <input
-            required
-            placeholder="Full Name"
-            className="w-full p-3 rounded bg-[#1E293B]"
-          />
-          <input
-            required
-            placeholder="Company Name"
-            className="w-full p-3 rounded bg-[#1E293B]"
-          />
-          <input
-            required
-            type="email"
-            placeholder="Email"
-            className="w-full p-3 rounded bg-[#1E293B]"
-          />
-          <textarea
-            required
-            rows={6}
-            placeholder="Your Review"
-            className="w-full p-3 rounded bg-[#1E293B]"
-          ></textarea>
-          <button className="w-full bg-[#4C8DFF] py-3 rounded font-bold">
-            Submit Review
-          </button>
-        </form>
-      </div>
+    <div className="min-h-screen bg-[#08111F] text-white">
+      <ReviewStats />
+
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+
+        {loading ? (
+          <div className="rounded-3xl border border-[#4C8DFF]/20 bg-[#111827]/70 py-28 text-center">
+            <h2 className="text-3xl font-bold">
+              Loading Reviews...
+            </h2>
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="rounded-3xl border border-[#4C8DFF]/20 bg-[#111827]/70 py-28 text-center">
+            <h2 className="text-4xl font-bold">
+              No Reviews Yet
+            </h2>
+
+            <p className="text-gray-400 mt-5 text-lg">
+              Be the first to share your experience with AiraSpark.
+            </p>
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+            {reviews.map((review) => (
+              <ReviewCard
+  key={review.id}
+  {...review}
+/>
+            ))}
+          </div>
+        )}
+
+      </section>
+
+      <ReviewForm />
     </div>
   );
 }
