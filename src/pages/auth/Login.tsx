@@ -262,7 +262,8 @@ export default function Login() {
               placeholder="Enter your Login ID"
             />
           </div>
-         <div>
+         
+ <div>
   <label className="portal-label">Password</label>
 
   <div className="relative">
