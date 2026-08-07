@@ -174,7 +174,7 @@ export default function Navbar() {
                 AIRASPARK
               </span>
               <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-[#AAB7C4] font-mono">
-                TECHNOLOGIES
+                INDUSTRIES
               </span>
             </div>
           </button>
