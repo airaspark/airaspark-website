@@ -162,11 +162,19 @@ export default function PortalLayout({
               <NotificationCenter />
               <ThemeToggle />
               <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-[var(--portal-border)]">
-                <div className="w-8 h-8 rounded-full bg-[var(--portal-accent)]/20 flex items-center justify-center text-[var(--portal-accent)] text-xs font-bold">
-                  {(user?.displayName ?? user?.email ?? "U")
-                    .charAt(0)
-                    .toUpperCase()}
-                </div>
+               {(user as any)?.profilePhoto ? (
+  <img
+    src={(user as any).profilePhoto}
+    alt="Profile"
+    className="w-8 h-8 rounded-full object-cover border border-[var(--portal-accent)]"
+  />
+) : (
+  <div className="w-8 h-8 rounded-full bg-[var(--portal-accent)]/20 flex items-center justify-center text-[var(--portal-accent)] text-xs font-bold">
+    {(user?.displayName ?? user?.email ?? "U")
+      .charAt(0)
+      .toUpperCase()}
+  </div>
+)}
                 <div className="text-right">
                   <p className="text-xs font-medium text-[var(--portal-text)] truncate max-w-[120px]">
                     {user?.displayName ?? "User"}

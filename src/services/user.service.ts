@@ -18,21 +18,32 @@ import { getStaffByUid, getStaffByEmail, getStaffByPhone } from "@/services/staf
 import { getCustomerByFirebaseUid, getCustomerByPhone } from "@/services/customer.service";
 
 function mapUserDoc(uid: string, data: Record<string, unknown>): UserProfile {
-  return {
-    uid,
-    email: (data.email as string) ?? null,
-    phone: (data.phone as string) ?? null,
-    displayName: (data.displayName as string) ?? null,
-    photoURL: (data.photoURL as string) ?? null,
-    role: (data.role as UserRole) ?? "pending",
-    entityId: (data.entityId as string) ?? null,
-    isLinked: Boolean(data.isLinked),
-    createdAt: timestampToIso(data.createdAt as never),
-    updatedAt: timestampToIso(data.updatedAt as never),
-    lastLoginAt: data.lastLoginAt
-      ? timestampToIso(data.lastLoginAt as never)
-      : null,
-  };
+ return {
+  uid,
+
+  email: (data.email as string) ?? null,
+  phone: (data.phone as string) ?? null,
+
+  displayName: (data.displayName as string) ?? null,
+
+  photoURL: (data.photoURL as string) ?? null,
+
+  profilePhoto: (data.profilePhoto as string) ?? null,
+
+  role: (data.role as UserRole) ?? "pending",
+
+  entityId: (data.entityId as string) ?? null,
+
+  isLinked: Boolean(data.isLinked),
+
+  createdAt: timestampToIso(data.createdAt as never),
+
+  updatedAt: timestampToIso(data.updatedAt as never),
+
+  lastLoginAt: data.lastLoginAt
+    ? timestampToIso(data.lastLoginAt as never)
+    : null,
+};
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
@@ -53,6 +64,7 @@ export async function createUserProfile(
     phone: data.phone ?? null,
     displayName: data.displayName ?? null,
     photoURL: data.photoURL ?? null,
+    profilePhoto: data.profilePhoto ?? null,
     role: data.role ?? "pending",
     entityId: data.entityId ?? null,
     isLinked: data.isLinked ?? false,

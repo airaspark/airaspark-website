@@ -5,10 +5,15 @@ export interface UserProfile {
   email: string | null;
   phone: string | null;
   displayName: string | null;
+
   photoURL: string | null;
+
+  profilePhoto: string | null;
+
   role: UserRole;
   entityId: string | null;
   isLinked: boolean;
+
   createdAt: string;
   updatedAt: string;
   lastLoginAt: string | null;
